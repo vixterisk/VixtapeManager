@@ -6,13 +6,16 @@ using System.Threading.Tasks;
 
 namespace YoutubePlaylistAPI
 {
-    internal class Video
+    internal class VideoModel
     {
         public string Link { get; set; }
         public string Title { get; set; }
         public string Channel { get; set; }
+        public VideoModel()
+        {
+        }
 
-        public Video(string link, string title, string channel)
+        public VideoModel(string link, string title, string channel)
         {
             this.Link = link;
             this.Title = title;

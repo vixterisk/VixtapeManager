@@ -6,28 +6,29 @@ using System.Threading.Tasks;
 
 namespace YoutubePlaylistAPI
 {
-    internal class Playlist
+    internal class PlaylistModel
     {
         public string Link { get; set; }
+        public int Count { get { return videos.Count; } }
 
-        readonly List<Video> videos;
-        public Playlist()
+        readonly List<VideoModel> videos;
+        public PlaylistModel()
         {
-            videos = new List<Video>();
+            videos = new List<VideoModel>();
         }
 
-        public Playlist(string link, List<Video> videos)
+        public PlaylistModel(string link, List<VideoModel> videos)
         {
             Link = link;
             this.videos = videos;
         }
 
-        public void Add(Video video)
+        public void Add(VideoModel video)
         {
             videos.Add(video);
         }
 
-        public void Insert(int index, Video video)
+        public void Insert(int index, VideoModel video)
         {
             videos.Insert(index, video);
         }
@@ -37,12 +38,12 @@ namespace YoutubePlaylistAPI
             videos.RemoveAt(index);
         }
 
-        public Video GetVideoByIndex(int i)
+        public VideoModel GetVideoByIndex(int i)
         {
             return videos[i];
         }
 
-        public List<Video> GetVideos()
+        public List<VideoModel> GetVideos()
         {
             return videos.ToList();
         }

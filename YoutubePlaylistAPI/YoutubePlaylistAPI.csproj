@@ -68,8 +68,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Playlist.cs" />
-    <Compile Include="State.cs" />
-    <Compile Include="Video.cs" />
+    <Compile Include="Store.cs" />
+    <Compile Include="VideoModel.cs" />
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
     </Compile>

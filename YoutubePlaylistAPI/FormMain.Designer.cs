@@ -96,11 +96,11 @@
             // 
             // videoBindingSource
             // 
-            this.videoBindingSource.DataSource = typeof(YoutubePlaylistAPI.Video);
+            this.videoBindingSource.DataSource = typeof(YoutubePlaylistAPI.VideoModel);
             // 
             // stateBindingSource
             // 
-            this.stateBindingSource.DataSource = typeof(YoutubePlaylistAPI.State);
+            this.stateBindingSource.DataSource = typeof(YoutubePlaylistAPI.Store);
             // 
             // FormMain
             // 
