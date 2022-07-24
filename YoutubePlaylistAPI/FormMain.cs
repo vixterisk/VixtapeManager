@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace YoutubePlaylistAPI
+namespace VixtapeManager
 {
     public partial class FormMain : Form
     {

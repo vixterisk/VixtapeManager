@@ -67,7 +67,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Playlist.cs" />
+    <Compile Include="Exceptions.cs" />
+    <Compile Include="PlaylistModel.cs" />
     <Compile Include="Store.cs" />
     <Compile Include="VideoModel.cs" />
     <Compile Include="FormMain.cs">

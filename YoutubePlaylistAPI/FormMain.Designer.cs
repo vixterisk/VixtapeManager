@@ -1,4 +1,4 @@
-﻿namespace YoutubePlaylistAPI
+﻿namespace VixtapeManager
 {
     partial class FormMain
     {
@@ -30,12 +30,13 @@
         {
             this.components = new System.ComponentModel.Container();
             this.playlistDGV = new System.Windows.Forms.DataGridView();
+            this.addVideoButton = new System.Windows.Forms.Button();
+            this.videoBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.stateBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.indexColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.linkDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.titleDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.channelDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.videoBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.stateBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.playlistDGV)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.videoBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.stateBindingSource)).BeginInit();
@@ -53,16 +54,32 @@
             this.titleDataGridViewTextBoxColumn,
             this.channelDataGridViewTextBoxColumn});
             this.playlistDGV.DataSource = this.videoBindingSource;
-            this.playlistDGV.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.playlistDGV.Location = new System.Drawing.Point(0, 0);
+            this.playlistDGV.Location = new System.Drawing.Point(12, 105);
             this.playlistDGV.Name = "playlistDGV";
             this.playlistDGV.RowHeadersWidth = 50;
             this.playlistDGV.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.playlistDGV.Size = new System.Drawing.Size(800, 700);
+            this.playlistDGV.Size = new System.Drawing.Size(776, 583);
             this.playlistDGV.TabIndex = 1;
             this.playlistDGV.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.playlistDGV_CellEndEdit);
             this.playlistDGV.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.playlistDGV_CellFormatting);
             this.playlistDGV.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.playlistDGV_CellValidating);
+            // 
+            // addVideoButton
+            // 
+            this.addVideoButton.Location = new System.Drawing.Point(658, 12);
+            this.addVideoButton.Name = "addVideoButton";
+            this.addVideoButton.Size = new System.Drawing.Size(130, 23);
+            this.addVideoButton.TabIndex = 2;
+            this.addVideoButton.Text = "Add Video to Playlist";
+            this.addVideoButton.UseVisualStyleBackColor = true;
+            // 
+            // videoBindingSource
+            // 
+            this.videoBindingSource.DataSource = typeof(VixtapeManager.VideoModel);
+            // 
+            // stateBindingSource
+            // 
+            this.stateBindingSource.DataSource = typeof(VixtapeManager.Store);
             // 
             // indexColumn
             // 
@@ -94,19 +111,12 @@
             this.channelDataGridViewTextBoxColumn.Name = "channelDataGridViewTextBoxColumn";
             this.channelDataGridViewTextBoxColumn.ReadOnly = true;
             // 
-            // videoBindingSource
-            // 
-            this.videoBindingSource.DataSource = typeof(YoutubePlaylistAPI.VideoModel);
-            // 
-            // stateBindingSource
-            // 
-            this.stateBindingSource.DataSource = typeof(YoutubePlaylistAPI.Store);
-            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 700);
+            this.Controls.Add(this.addVideoButton);
             this.Controls.Add(this.playlistDGV);
             this.Name = "FormMain";
             this.Text = "Vixtape Manager";
@@ -118,9 +128,10 @@
         }
 
         #endregion
-        private System.Windows.Forms.DataGridView playlistDGV;
         private System.Windows.Forms.BindingSource stateBindingSource;
         private System.Windows.Forms.BindingSource videoBindingSource;
+        private System.Windows.Forms.DataGridView playlistDGV;
+        private System.Windows.Forms.Button addVideoButton;
         private System.Windows.Forms.DataGridViewTextBoxColumn indexColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn linkDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn titleDataGridViewTextBoxColumn;
