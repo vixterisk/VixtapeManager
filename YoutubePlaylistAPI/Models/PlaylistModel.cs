@@ -13,6 +13,10 @@ namespace YoutubePlaylistAPI
         /// </summary>
         public string Link { get; set; }
         /// <summary>
+        /// Returns the title of the playlist.
+        /// </summary>
+        public string Title { get; set; }
+        /// <summary>
         /// Returns the number of videos in the playlist.
         /// </summary>
         public int Count { get { return videos.Count; } }
@@ -22,10 +26,22 @@ namespace YoutubePlaylistAPI
         {
             videos = new List<VideoModel>();
         }
-
         public PlaylistModel(string link, List<VideoModel> videos)
         {
             Link = link;
+            this.videos = videos;
+        }
+        public PlaylistModel(string link, string title)
+        {
+            Link = link;
+            Title = title;
+            videos = new List<VideoModel>();
+        }
+
+        public PlaylistModel(string link, string title, List<VideoModel> videos)
+        {
+            Link = link;
+            Title = title;
             this.videos = videos;
         }
 
@@ -57,9 +73,9 @@ namespace YoutubePlaylistAPI
             {
                 videos.Insert(index, video);
             }
-            catch
+            catch (IndexOutOfRangeException e)
             {
-                throw new IndexOutOfRangeException("Video Index was out of range");
+                throw new IndexOutOfRangeException(e.Message);
             }
         }
 
@@ -73,9 +89,9 @@ namespace YoutubePlaylistAPI
             {
                 videos.RemoveAt(index);
             }
-            catch
+            catch (IndexOutOfRangeException e)
             {
-                throw new IndexOutOfRangeException("Video Index was out of range");
+                throw new IndexOutOfRangeException(e.Message);
             }
         }
 
@@ -89,9 +105,9 @@ namespace YoutubePlaylistAPI
             {
                 return videos.ToList();
             }
-            catch 
+            catch (PlaylistNullException e)
             {
-                throw new PlaylistNullException("Playlist was null.");
+                throw new PlaylistNullException(e.Message);
             }
         }
 
@@ -107,10 +123,14 @@ namespace YoutubePlaylistAPI
                 Remove(oldIndex);
                 Insert(newIndex, video);
             }
-            catch
+            catch (IndexOutOfRangeException e)
             {
-                throw new IndexOutOfRangeException("Video Index was out of range");
+                throw new IndexOutOfRangeException(e.Message);
             }
+        }
+        public override string ToString()
+        {
+            return Title.ToString() + @", https://www.youtube.com/playlist?list=" + Link.ToString();
         }
     }
 }

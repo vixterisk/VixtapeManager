@@ -22,6 +22,11 @@ namespace YoutubePlaylistAPI
         {
             //Store.Pull();
             //Synchronize();
+            var authForm = new AuthForm();
+            if (authForm.ShowDialog() == DialogResult.OK)
+            {
+
+            }
         }
 
         void Synchronize()
@@ -59,6 +64,8 @@ namespace YoutubePlaylistAPI
 
         private void playlistDGV_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
         {
+            if (Store.CurrentPlaylist == null)
+                return;
             e.Cancel = !FormUtils.isIndexValueValid(playlistDGV.Rows[e.RowIndex].Cells["indexColumn"].EditedFormattedValue, Store.CurrentPlaylist.Count);
         }
 
@@ -75,11 +82,6 @@ namespace YoutubePlaylistAPI
                 Synchronize();
             }
             addVideoForm.Dispose();
-        }
-
-        private void signInButton_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

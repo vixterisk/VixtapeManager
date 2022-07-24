@@ -8,6 +8,7 @@ namespace YoutubePlaylistAPI
 {
     static class Store
     {
+        public static List<PlaylistModel> UsersPlaylist { get; set; } = new List<PlaylistModel>();
         public static PlaylistModel CurrentPlaylist { get; set; }
 
         public static void FillTest()

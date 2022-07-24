@@ -31,13 +31,12 @@
             this.components = new System.ComponentModel.Container();
             this.playlistDGV = new System.Windows.Forms.DataGridView();
             this.indexColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.showAddVideoFormButton = new System.Windows.Forms.Button();
             this.linkDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.titleDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.channelDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.videoBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.showAddVideoFormButton = new System.Windows.Forms.Button();
             this.stateBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.signInButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.playlistDGV)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.videoBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.stateBindingSource)).BeginInit();
@@ -71,6 +70,16 @@
             this.indexColumn.MinimumWidth = 50;
             this.indexColumn.Name = "indexColumn";
             // 
+            // showAddVideoFormButton
+            // 
+            this.showAddVideoFormButton.Location = new System.Drawing.Point(658, 12);
+            this.showAddVideoFormButton.Name = "showAddVideoFormButton";
+            this.showAddVideoFormButton.Size = new System.Drawing.Size(130, 23);
+            this.showAddVideoFormButton.TabIndex = 2;
+            this.showAddVideoFormButton.Text = "Add Video to Playlist";
+            this.showAddVideoFormButton.UseVisualStyleBackColor = true;
+            this.showAddVideoFormButton.Click += new System.EventHandler(this.ShowAddVideoButton_Click);
+            // 
             // linkDataGridViewTextBoxColumn
             // 
             this.linkDataGridViewTextBoxColumn.DataPropertyName = "Link";
@@ -99,36 +108,15 @@
             // 
             this.videoBindingSource.DataSource = typeof(YoutubePlaylistAPI.VideoModel);
             // 
-            // showAddVideoFormButton
-            // 
-            this.showAddVideoFormButton.Location = new System.Drawing.Point(658, 12);
-            this.showAddVideoFormButton.Name = "showAddVideoFormButton";
-            this.showAddVideoFormButton.Size = new System.Drawing.Size(130, 23);
-            this.showAddVideoFormButton.TabIndex = 2;
-            this.showAddVideoFormButton.Text = "Add Video to Playlist";
-            this.showAddVideoFormButton.UseVisualStyleBackColor = true;
-            this.showAddVideoFormButton.Click += new System.EventHandler(this.ShowAddVideoButton_Click);
-            // 
             // stateBindingSource
             // 
             this.stateBindingSource.DataSource = typeof(YoutubePlaylistAPI.Store);
-            // 
-            // signInButton
-            // 
-            this.signInButton.Location = new System.Drawing.Point(12, 12);
-            this.signInButton.Name = "signInButton";
-            this.signInButton.Size = new System.Drawing.Size(118, 23);
-            this.signInButton.TabIndex = 3;
-            this.signInButton.Text = "Sign In with Google";
-            this.signInButton.UseVisualStyleBackColor = true;
-            this.signInButton.Click += new System.EventHandler(this.signInButton_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 700);
-            this.Controls.Add(this.signInButton);
             this.Controls.Add(this.showAddVideoFormButton);
             this.Controls.Add(this.playlistDGV);
             this.Name = "MainForm";
@@ -149,7 +137,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn linkDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn titleDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn channelDataGridViewTextBoxColumn;
-        private System.Windows.Forms.Button signInButton;
     }
 }
 
