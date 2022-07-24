@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace YoutubePlaylistAPI
@@ -19,9 +12,21 @@ namespace YoutubePlaylistAPI
 
         private async void signInButton_Click(object sender, EventArgs e)
         {
-            var controller = new YoutubeAPIController();
-            await controller.Run();
+            await Store.LoadUserPlaylistsAsync();
             playlistCB.DataSource = Store.UsersPlaylist;
+        }
+
+        private async void AuthOkayButton_Click(object sender, EventArgs e)
+        {
+            if (Store.UsersPlaylist == null)
+                return;
+            else
+            {
+                var PlaylistModel = (PlaylistModel)playlistCB.SelectedItem;
+                Store.CurrentPlaylist = PlaylistModel;
+                await Store.LoadPlaylistVideosAsync();
+                DialogResult = DialogResult.OK;
+            }
         }
     }
 }

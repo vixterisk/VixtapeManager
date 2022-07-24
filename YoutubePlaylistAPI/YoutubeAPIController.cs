@@ -16,13 +16,14 @@ namespace YoutubePlaylistAPI
 {
     internal class YoutubeAPIController
     {
-        public async Task Run()
+        public async Task LoadUserPlaylists()
         {
             UserCredential credential;
+            //@TODO change path to smth normal
             using (var stream = new FileStream(@"D:\VS_Projects\ypA\YoutubePlaylistAPI\YoutubePlaylistAPI\client_secrets.json", FileMode.Open, FileAccess.Read))
             {
                 credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
-                    GoogleClientSecrets.Load(stream).Secrets,
+                    GoogleClientSecrets.FromStream(stream).Secrets,
                     new[] { YouTubeService.Scope.Youtube },
                     "user",
                     CancellationToken.None
@@ -35,23 +36,60 @@ namespace YoutubePlaylistAPI
                 ApplicationName = this.GetType().ToString()
             });
 
-            // var channelsListRequest = youtubeService.Channels.List("contentDetails");
             var playlistListRequest = youtubeService.Playlists.List("snippet");
             playlistListRequest.Mine = true;
-
-            // Retrieve the contentDetails part of the channel resource for the authenticated user's channel.
-            var playlistListResponse = await playlistListRequest.ExecuteAsync();
-
-            foreach (var playlist in playlistListResponse.Items)
+            playlistListRequest.MaxResults = 50;
+            do
             {
-                // From the API response, extract the playlist ID that identifies the list
-                // of videos uploaded to the authenticated user's channel.
-                var playlistListId = playlist.Id;
-                var playlistListName = playlist.Snippet.Title;
+                var playlistListResponse = await playlistListRequest.ExecuteAsync();
+                foreach (var playlist in playlistListResponse.Items)
+                {
+                    var playlistListId = playlist.Id;
+                    var playlistListName = playlist.Snippet.Title;
 
-                var playlistItem = new PlaylistModel(playlistListId, playlistListName);
-                Store.UsersPlaylist.Add(playlistItem);
+                    var currentPlaylist = new PlaylistModel(playlistListId, playlistListName);
+                    Store.UsersPlaylist.Add(currentPlaylist);
+                }
+                playlistListRequest.PageToken = playlistListResponse.NextPageToken;
+            } while (playlistListRequest.PageToken != null);
+        }
+
+        public async Task LoadPlaylistVideos(string playlistURL)
+        {
+            UserCredential credential;
+            using (var stream = new FileStream(@"D:\VS_Projects\ypA\YoutubePlaylistAPI\YoutubePlaylistAPI\client_secrets.json", FileMode.Open, FileAccess.Read))
+            {
+                credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
+                    GoogleClientSecrets.FromStream(stream).Secrets,
+                    new[] { YouTubeService.Scope.Youtube },
+                    "user",
+                    CancellationToken.None
+                );
             }
+
+            var youtubeService = new YouTubeService(new BaseClientService.Initializer()
+            {
+                HttpClientInitializer = credential,
+                ApplicationName = this.GetType().ToString()
+            });
+
+            var playlistItemsListRequest = youtubeService.PlaylistItems.List("snippet");
+            playlistItemsListRequest.PlaylistId = playlistURL;
+            playlistItemsListRequest.MaxResults = 50;
+            do
+            {
+                var playlistItemsListResponse = await playlistItemsListRequest.ExecuteAsync();
+                foreach (var video in playlistItemsListResponse.Items)
+                {
+                    var videoId = video.Snippet.ResourceId.VideoId;
+                    var videoTitle = video.Snippet.Title;
+                    var videoChannelTitle = video.Snippet.VideoOwnerChannelTitle;
+
+                    var currentVideo = new VideoModel(videoId, videoTitle, videoChannelTitle);
+                    Store.CurrentPlaylist.Add(currentVideo);
+                }
+                playlistItemsListRequest.PageToken = playlistItemsListResponse.NextPageToken;
+            } while (playlistItemsListRequest.PageToken != null);
         }
     }
 }

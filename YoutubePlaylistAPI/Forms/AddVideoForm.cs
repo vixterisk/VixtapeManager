@@ -38,7 +38,7 @@ namespace YoutubePlaylistAPI
 
         private void AddVideoButton_Click(object sender, EventArgs e)
         {
-            videoURL = urlTB.Text;
+            videoURL = urlTB.Text.Replace(VideoModel.LinkPrefix, "");
             videoIndex = int.Parse(indexComboBox.Text);
         }
 

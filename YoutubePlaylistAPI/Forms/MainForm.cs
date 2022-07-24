@@ -20,13 +20,9 @@ namespace YoutubePlaylistAPI
 
         private void InitializeForm()
         {
-            //Store.Pull();
-            //Synchronize();
             var authForm = new AuthForm();
-            if (authForm.ShowDialog() == DialogResult.OK)
-            {
-
-            }
+            authForm.ShowDialog();
+            Synchronize();
         }
 
         void Synchronize()
@@ -43,6 +39,8 @@ namespace YoutubePlaylistAPI
         {
             if (playlistDGV.Columns[e.ColumnIndex].Name == "indexColumn")
                 e.Value = (e.RowIndex + 1).ToString();
+            if (playlistDGV.Columns[e.ColumnIndex].Name == "linkDataGridViewTextBoxColumn")
+                e.Value = VideoModel.LinkPrefix + e.Value;
         }
 
         private void playlistDGV_CellEndEdit(object sender, DataGridViewCellEventArgs e)
@@ -66,7 +64,7 @@ namespace YoutubePlaylistAPI
         {
             if (Store.CurrentPlaylist == null)
                 return;
-            e.Cancel = !FormUtils.isIndexValueValid(playlistDGV.Rows[e.RowIndex].Cells["indexColumn"].EditedFormattedValue, Store.CurrentPlaylist.Count);
+            e.Cancel = !FormUtils.isIndexValueValid(playlistDGV.Rows[e.RowIndex].Cells["indexColumn"].EditedFormattedValue, Store.CurrentPlaylist.Count + 1);
         }
 
         private void ShowAddVideoButton_Click(object sender, EventArgs e)
@@ -82,6 +80,19 @@ namespace YoutubePlaylistAPI
                 Synchronize();
             }
             addVideoForm.Dispose();
+        }
+
+        private void playlistDGV_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete)
+            {
+                var selectedCells = new DataGridViewCell[playlistDGV.SelectedCells.Count];
+                playlistDGV.SelectedCells.CopyTo(selectedCells, 0);
+                var selectedRows = selectedCells.Select(x => x.RowIndex).Distinct().ToList().OrderByDescending(x => x);
+                foreach (var row in selectedRows)
+                    Store.CurrentPlaylist.Remove(row);
+                Synchronize();
+            }
         }
     }
 }

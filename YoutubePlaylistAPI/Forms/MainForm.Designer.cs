@@ -63,6 +63,7 @@
             this.playlistDGV.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.playlistDGV_CellEndEdit);
             this.playlistDGV.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.playlistDGV_CellFormatting);
             this.playlistDGV.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.playlistDGV_CellValidating);
+            this.playlistDGV.KeyDown += new System.Windows.Forms.KeyEventHandler(this.playlistDGV_KeyDown);
             // 
             // indexColumn
             // 

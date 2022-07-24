@@ -31,7 +31,7 @@
             this.signInButton = new System.Windows.Forms.Button();
             this.playlistCB = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.signInOkayButton = new System.Windows.Forms.Button();
+            this.AuthOkayButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // signInButton
@@ -62,22 +62,22 @@
             this.label1.TabIndex = 2;
             this.label1.Text = "Choose a playlist:";
             // 
-            // signInOkayButton
+            // AuthOkayButton
             // 
-            this.signInOkayButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.signInOkayButton.Location = new System.Drawing.Point(508, 79);
-            this.signInOkayButton.Name = "signInOkayButton";
-            this.signInOkayButton.Size = new System.Drawing.Size(126, 23);
-            this.signInOkayButton.TabIndex = 3;
-            this.signInOkayButton.Text = "Manage Videos";
-            this.signInOkayButton.UseVisualStyleBackColor = true;
+            this.AuthOkayButton.Location = new System.Drawing.Point(508, 79);
+            this.AuthOkayButton.Name = "AuthOkayButton";
+            this.AuthOkayButton.Size = new System.Drawing.Size(126, 23);
+            this.AuthOkayButton.TabIndex = 3;
+            this.AuthOkayButton.Text = "Manage Videos";
+            this.AuthOkayButton.UseVisualStyleBackColor = true;
+            this.AuthOkayButton.Click += new System.EventHandler(this.AuthOkayButton_Click);
             // 
             // AuthForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(646, 114);
-            this.Controls.Add(this.signInOkayButton);
+            this.Controls.Add(this.AuthOkayButton);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.playlistCB);
             this.Controls.Add(this.signInButton);
@@ -93,6 +93,6 @@
         private System.Windows.Forms.Button signInButton;
         private System.Windows.Forms.ComboBox playlistCB;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button signInOkayButton;
+        private System.Windows.Forms.Button AuthOkayButton;
     }
 }

@@ -8,6 +8,7 @@ namespace YoutubePlaylistAPI
 {
     internal class VideoModel
     {
+        public static readonly string LinkPrefix = @"https://youtu.be/";
         public string Link { get; set; }
         public string Title { get; set; }
         public string Channel { get; set; }
