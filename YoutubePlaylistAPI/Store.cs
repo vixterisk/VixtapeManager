@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VixtapeManager
+namespace YoutubePlaylistAPI
 {
     static class Store
     {
@@ -29,6 +29,7 @@ namespace VixtapeManager
 
         public static void Pull()
         {
+            FillTest();
             // API fetching
         }
     }

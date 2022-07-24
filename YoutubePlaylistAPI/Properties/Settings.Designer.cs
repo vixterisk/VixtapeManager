@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace VixtapeManager.Properties
+namespace YoutubePlaylistAPI.Properties
 {
 
 
