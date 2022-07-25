@@ -64,6 +64,7 @@ namespace YoutubePlaylistAPI
         {
             if (Store.CurrentPlaylist == null)
                 return;
+            // @TODO исправить костыли с +1?
             e.Cancel = !FormUtils.isIndexValueValid(playlistDGV.Rows[e.RowIndex].Cells["indexColumn"].EditedFormattedValue, Store.CurrentPlaylist.Count + 1);
         }
 
