@@ -21,21 +21,19 @@ namespace YoutubePlaylistAPI
         /// </summary>
         public int Count { get { return videos.Count; } }
 
-        readonly List<VideoModel> videos;
+        List<VideoModel> videos = new List<VideoModel>();
         public PlaylistModel()
         {
-            videos = new List<VideoModel>();
-        }
-        public PlaylistModel(string link, List<VideoModel> videos)
-        {
-            Link = link;
-            this.videos = videos;
         }
         public PlaylistModel(string link, string title)
         {
             Link = link;
             Title = title;
-            videos = new List<VideoModel>();
+        }
+        public PlaylistModel(string link, List<VideoModel> videos)
+        {
+            Link = link;
+            this.videos = videos;
         }
 
         public PlaylistModel(string link, string title, List<VideoModel> videos)
@@ -60,6 +58,8 @@ namespace YoutubePlaylistAPI
         /// </summary>
         public void Add(VideoModel video)
         {
+            if (video == null)
+                throw new VideoNullException("Video was null.");
             videos.Add(video);
         }
 
@@ -69,15 +69,11 @@ namespace YoutubePlaylistAPI
         /// <exception cref="IndexOutOfRangeException"></exception>
         public void Insert(int index, VideoModel video)
         {
-            // @TODO Fix try-catch to work properly 
-            try
+            if (index < 0 || index >= videos.Count)
             {
-                videos.Insert(index, video);
+                throw new IndexOutOfRangeException("Video Index was invalid.");
             }
-            catch (IndexOutOfRangeException e)
-            {
-                throw new IndexOutOfRangeException(e.Message);
-            }
+            videos.Insert(index, video);
         }
 
         /// <summary>
@@ -86,14 +82,11 @@ namespace YoutubePlaylistAPI
         /// <exception cref="IndexOutOfRangeException"></exception>
         public void Remove(int index)
         {
-            try
+            if (index < 0 || index >= videos.Count)
             {
-                videos.RemoveAt(index);
+                throw new IndexOutOfRangeException("Video Index was invalid.");
             }
-            catch (IndexOutOfRangeException e)
-            {
-                throw new IndexOutOfRangeException(e.Message);
-            }
+            videos.RemoveAt(index);
         }
 
         /// <summary>
@@ -102,22 +95,24 @@ namespace YoutubePlaylistAPI
         /// <exception cref="PlaylistNullException"></exception>
         public List<VideoModel> GetVideos()
         {
-            try
+            if (videos == null)
             {
-                return videos.ToList();
+                throw new PlaylistNullException("Playlist was null.");
             }
-            catch (PlaylistNullException e)
-            {
-                throw new PlaylistNullException(e.Message);
-            }
+            return videos.ToList();
         }
 
         /// <summary>
         /// Moves a video in the playlist from one position to another.
         /// </summary>
         /// <exception cref="IndexOutOfRangeException"></exception>
+        /// <exception cref="PlaylistNullException"></exception>
         public void Move(int oldIndex, int newIndex)
         {
+            if (videos == null)
+            {
+                throw new PlaylistNullException("Playlist was null.");
+            }
             try
             {
                 var video = videos[oldIndex];

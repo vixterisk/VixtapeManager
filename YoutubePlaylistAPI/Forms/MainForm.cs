@@ -27,16 +27,14 @@ namespace YoutubePlaylistAPI
 
         void Synchronize()
         {
-            try { 
+            if (Store.CurrentPlaylist != null)
                 playlistDGV.DataSource = Store.CurrentPlaylist.GetVideos();
-            }
-            catch (PlaylistNullException e) {
-                MessageBox.Show(e.Message);
-            }
         }
 
         private void playlistDGV_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
+            if (Store.CurrentPlaylist == null)
+                return;
             if (playlistDGV.Columns[e.ColumnIndex].Name == "indexColumn")
                 e.Value = (e.RowIndex + 1).ToString();
             if (playlistDGV.Columns[e.ColumnIndex].Name == "linkDataGridViewTextBoxColumn")
@@ -52,7 +50,7 @@ namespace YoutubePlaylistAPI
             var oldIndex = e.RowIndex;
             var newIndex = Convert.ToInt32(value) - 1;
             try {
-                Store.CurrentPlaylist.Move(oldIndex, newIndex);
+                Store.MoveToNewPositionInCurrentPlaylist(oldIndex, newIndex);
             }
             catch (IndexOutOfRangeException ex) {
                 MessageBox.Show(ex.Message);
@@ -64,20 +62,38 @@ namespace YoutubePlaylistAPI
         {
             if (Store.CurrentPlaylist == null)
                 return;
-            // @TODO исправить костыли с +1?
+            // TODO: исправить костыли с +1?
             e.Cancel = !FormUtils.isIndexValueValid(playlistDGV.Rows[e.RowIndex].Cells["indexColumn"].EditedFormattedValue, Store.CurrentPlaylist.Count + 1);
         }
 
-        private void ShowAddVideoButton_Click(object sender, EventArgs e)
+        private async void ShowAddVideoButton_Click(object sender, EventArgs e)
         {
             var addVideoForm = new AddVideoForm();
             if (addVideoForm.ShowDialog(this) == DialogResult.OK) {
                 var videoURL = addVideoForm.VideoURL;
                 var index = addVideoForm.VideoIndex - 1;
                 if (index == Store.CurrentPlaylist.Count)
-                    Store.CurrentPlaylist.Add(new VideoModel(videoURL, "Title", "Channel"));
+                {
+                    try
+                    {
+                        await Store.AddToCurrentPlaylistAsync(videoURL);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(String.Format("Unable To Add Video \n({0})", string.Join("\n", ex.Message)), "Error");
+                    }
+                }
                 else
-                    Store.CurrentPlaylist.Insert(index, new VideoModel(videoURL, "Title", "Channel"));
+                {
+                    try
+                    {
+                        await Store.InsertIntoCurrentPlaylistAsync(index, videoURL);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(String.Format("Unable To Insert Video \n({0})", string.Join("\n", ex.Message)), "Error");
+                    }
+                }
                 Synchronize();
             }
             addVideoForm.Dispose();
@@ -90,8 +106,8 @@ namespace YoutubePlaylistAPI
                 var selectedCells = new DataGridViewCell[playlistDGV.SelectedCells.Count];
                 playlistDGV.SelectedCells.CopyTo(selectedCells, 0);
                 var selectedRows = selectedCells.Select(x => x.RowIndex).Distinct().ToList().OrderByDescending(x => x);
-                foreach (var row in selectedRows)
-                    Store.CurrentPlaylist.Remove(row);
+                foreach (var currentSelectedRow in selectedRows)
+                    Store.RemoveFromCurrentPlaylist(currentSelectedRow);
                 Synchronize();
             }
         }

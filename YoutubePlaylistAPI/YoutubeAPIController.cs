@@ -16,11 +16,13 @@ namespace YoutubePlaylistAPI
 {
     internal class YoutubeAPIController
     {
+        // TODO: change path to smth normal
+        string clientSecretPath = @"D:\VS_Projects\ypA\YoutubePlaylistAPI\YoutubePlaylistAPI\client_secrets.json";
+        string applicationName = "Vixtape Manager";
         public async Task LoadUserPlaylists()
         {
             UserCredential credential;
-            //@TODO change path to smth normal
-            using (var stream = new FileStream(@"D:\VS_Projects\ypA\YoutubePlaylistAPI\YoutubePlaylistAPI\client_secrets.json", FileMode.Open, FileAccess.Read))
+            using (var stream = new FileStream(clientSecretPath, FileMode.Open, FileAccess.Read))
             {
                 credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
                     GoogleClientSecrets.FromStream(stream).Secrets,
@@ -33,7 +35,7 @@ namespace YoutubePlaylistAPI
             var youtubeService = new YouTubeService(new BaseClientService.Initializer()
             {
                 HttpClientInitializer = credential,
-                ApplicationName = this.GetType().ToString()
+                ApplicationName = applicationName
             });
 
             var playlistListRequest = youtubeService.Playlists.List("snippet");
@@ -54,10 +56,10 @@ namespace YoutubePlaylistAPI
             } while (playlistListRequest.PageToken != null);
         }
 
-        public async Task LoadPlaylistVideos(string playlistURL)
+        public async Task<VideoModel> InsertVideoIntoPlaylist(string playlistURL, int index, string videoURL)
         {
             UserCredential credential;
-            using (var stream = new FileStream(@"D:\VS_Projects\ypA\YoutubePlaylistAPI\YoutubePlaylistAPI\client_secrets.json", FileMode.Open, FileAccess.Read))
+            using (var stream = new FileStream(clientSecretPath, FileMode.Open, FileAccess.Read))
             {
                 credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
                     GoogleClientSecrets.FromStream(stream).Secrets,
@@ -70,7 +72,44 @@ namespace YoutubePlaylistAPI
             var youtubeService = new YouTubeService(new BaseClientService.Initializer()
             {
                 HttpClientInitializer = credential,
-                ApplicationName = this.GetType().ToString()
+                ApplicationName = applicationName
+            });
+
+            var newPlaylistItem = new PlaylistItem();
+            newPlaylistItem.Snippet = new PlaylistItemSnippet();
+            newPlaylistItem.Snippet.Position = index;
+            newPlaylistItem.Snippet.PlaylistId = playlistURL;
+            newPlaylistItem.Snippet.ResourceId = new ResourceId();
+            newPlaylistItem.Snippet.ResourceId.Kind = "youtube#video";
+            newPlaylistItem.Snippet.ResourceId.VideoId = videoURL;
+            try
+            {
+                newPlaylistItem = await youtubeService.PlaylistItems.Insert(newPlaylistItem, "snippet").ExecuteAsync();
+                return new VideoModel(videoURL, newPlaylistItem.Snippet.Title, newPlaylistItem.Snippet.VideoOwnerChannelTitle);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        public async Task LoadPlaylistVideos(string playlistURL)
+        {
+            UserCredential credential;
+            using (var stream = new FileStream(clientSecretPath, FileMode.Open, FileAccess.Read))
+            {
+                credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
+                    GoogleClientSecrets.FromStream(stream).Secrets,
+                    new[] { YouTubeService.Scope.Youtube },
+                    "user",
+                    CancellationToken.None
+                );
+            }
+
+            var youtubeService = new YouTubeService(new BaseClientService.Initializer()
+            {
+                HttpClientInitializer = credential,
+                ApplicationName = applicationName
             });
 
             var playlistItemsListRequest = youtubeService.PlaylistItems.List("snippet");

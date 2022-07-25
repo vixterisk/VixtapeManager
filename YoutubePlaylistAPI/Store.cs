@@ -24,14 +24,41 @@ namespace YoutubePlaylistAPI
             await controller.LoadUserPlaylists();
         }
 
-        public static void Push()
+        public static void RemoveFromCurrentPlaylist(int index)
         {
-            // Send new data to API
+            CurrentPlaylist.Remove(index);
+        }
+        public static async Task AddToCurrentPlaylistAsync(string videoURL)
+        {
+            var controller = new YoutubeAPIController(); 
+            try
+            {
+                var video = await controller.InsertVideoIntoPlaylist(CurrentPlaylist.Link, CurrentPlaylist.Count, videoURL);
+                CurrentPlaylist.Add(video);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
 
-        public static void Pull()
+        public static async Task InsertIntoCurrentPlaylistAsync(int index, string videoURL)
         {
-            // API fetching
+            var controller = new YoutubeAPIController();
+            try
+            {
+                var video = await controller.InsertVideoIntoPlaylist(CurrentPlaylist.Link, index, videoURL);
+                CurrentPlaylist.Insert(index, video);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        internal static void MoveToNewPositionInCurrentPlaylist(int oldIndex, int newIndex)
+        {
+            CurrentPlaylist.Move(oldIndex, newIndex);
         }
     }
 }

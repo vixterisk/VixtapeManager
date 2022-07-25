@@ -81,6 +81,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.playlistCB);
             this.Controls.Add(this.signInButton);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "AuthForm";
             this.Text = "Sign In with Google";
             this.ResumeLayout(false);

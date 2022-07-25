@@ -28,4 +28,16 @@ namespace YoutubePlaylistAPI
         {
         }
     }
+
+    public class VideoNullException : ArgumentNullException
+    {
+        public VideoNullException()
+        {
+        }
+
+        public VideoNullException(string message)
+            : base(message)
+        {
+        }
+    }
 }
