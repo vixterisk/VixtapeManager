@@ -69,6 +69,7 @@ namespace YoutubePlaylistAPI
         /// <exception cref="IndexOutOfRangeException"></exception>
         public void Insert(int index, VideoModel video)
         {
+            // @TODO Fix try-catch to work properly 
             try
             {
                 videos.Insert(index, video);
