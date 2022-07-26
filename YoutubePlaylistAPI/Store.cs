@@ -11,22 +11,32 @@ namespace YoutubePlaylistAPI
         public static List<PlaylistModel> UsersPlaylist { get; set; }
         public static PlaylistModel CurrentPlaylist { get; set; }
 
-        internal static async Task LoadPlaylistVideosAsync()
+        internal static async Task LoadCurrentPlaylistVideosAsync()
         {
             var controller = new YoutubeAPIController();
-            await controller.LoadPlaylistVideos(CurrentPlaylist.Link);
+            var videos = await controller.LoadPlaylistVideos(CurrentPlaylist.Link);
+            CurrentPlaylist = new PlaylistModel(CurrentPlaylist.Link, videos);
         }
 
         internal static async Task LoadUserPlaylistsAsync()
         {
             UsersPlaylist = new List<PlaylistModel>();
             var controller = new YoutubeAPIController();
-            await controller.LoadUserPlaylists();
+            UsersPlaylist = await controller.LoadUserPlaylists();
         }
 
-        public static void RemoveFromCurrentPlaylist(int index)
+        public static async Task RemoveFromCurrentPlaylist(int index, string videoURL)
         {
-            CurrentPlaylist.Remove(index);
+            var controller = new YoutubeAPIController();
+            try
+            {
+                await controller.RemoveVideoFromPlaylist(CurrentPlaylist.Link, index, videoURL);
+                CurrentPlaylist.Remove(index);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
         public static async Task AddToCurrentPlaylistAsync(string videoURL)
         {
@@ -56,9 +66,18 @@ namespace YoutubePlaylistAPI
             }
         }
 
-        internal static void MoveToNewPositionInCurrentPlaylist(int oldIndex, int newIndex)
+        internal static async Task MoveToNewPositionInCurrentPlaylist(int oldIndex, int newIndex, string videoURL)
         {
-            CurrentPlaylist.Move(oldIndex, newIndex);
+            var controller = new YoutubeAPIController();
+            try
+            {
+                await controller.UpdateVideoPositionInPlaylist(CurrentPlaylist.Link, oldIndex, newIndex, videoURL);
+                CurrentPlaylist.Move(oldIndex, newIndex);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
     }
 }

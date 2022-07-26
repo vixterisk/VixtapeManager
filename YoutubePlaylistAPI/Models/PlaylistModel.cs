@@ -69,7 +69,7 @@ namespace YoutubePlaylistAPI
         /// <exception cref="IndexOutOfRangeException"></exception>
         public void Insert(int index, VideoModel video)
         {
-            if (index < 0 || index >= videos.Count)
+            if (index < 0 || index > videos.Count)
             {
                 throw new IndexOutOfRangeException("Video Index was invalid.");
             }
@@ -82,7 +82,7 @@ namespace YoutubePlaylistAPI
         /// <exception cref="IndexOutOfRangeException"></exception>
         public void Remove(int index)
         {
-            if (index < 0 || index >= videos.Count)
+            if (index < 0 || index > videos.Count)
             {
                 throw new IndexOutOfRangeException("Video Index was invalid.");
             }

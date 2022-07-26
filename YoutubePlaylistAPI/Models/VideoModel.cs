@@ -22,5 +22,12 @@ namespace YoutubePlaylistAPI
             this.Title = title;
             this.Channel = channel;
         }
+        // TODO: Create modelUtils for this?
+        public static string LinkWithoutPrefix(string link)
+        {
+            if (link == null)
+                throw new ArgumentNullException();
+            return link.Replace(LinkPrefix, "");
+        }
     }
 }

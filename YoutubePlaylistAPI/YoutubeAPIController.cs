@@ -14,12 +14,14 @@ using System.Threading.Tasks;
 
 namespace YoutubePlaylistAPI
 {
+    // TODO: Make it singleton
     internal class YoutubeAPIController
     {
         // TODO: change path to smth normal
-        string clientSecretPath = @"D:\VS_Projects\ypA\YoutubePlaylistAPI\YoutubePlaylistAPI\client_secrets.json";
-        string applicationName = "Vixtape Manager";
-        public async Task LoadUserPlaylists()
+        // TODO: протухание токена
+        const string clientSecretPath = @"client_secrets.json";
+        const string applicationName = "Vixtape Manager";
+        public async Task<List<PlaylistModel>> LoadUserPlaylists()
         {
             UserCredential credential;
             using (var stream = new FileStream(clientSecretPath, FileMode.Open, FileAccess.Read))
@@ -41,6 +43,8 @@ namespace YoutubePlaylistAPI
             var playlistListRequest = youtubeService.Playlists.List("snippet");
             playlistListRequest.Mine = true;
             playlistListRequest.MaxResults = 50;
+
+            var result = new List<PlaylistModel>();
             do
             {
                 var playlistListResponse = await playlistListRequest.ExecuteAsync();
@@ -50,10 +54,86 @@ namespace YoutubePlaylistAPI
                     var playlistListName = playlist.Snippet.Title;
 
                     var currentPlaylist = new PlaylistModel(playlistListId, playlistListName);
-                    Store.UsersPlaylist.Add(currentPlaylist);
+                    result.Add(currentPlaylist);
                 }
                 playlistListRequest.PageToken = playlistListResponse.NextPageToken;
             } while (playlistListRequest.PageToken != null);
+            return result;
+        }
+
+        public async Task<List<VideoModel>> LoadPlaylistVideos(string playlistURL)
+        {
+            UserCredential credential;
+            using (var stream = new FileStream(clientSecretPath, FileMode.Open, FileAccess.Read))
+            {
+                credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
+                    GoogleClientSecrets.FromStream(stream).Secrets,
+                    new[] { YouTubeService.Scope.Youtube },
+                    "user",
+                    CancellationToken.None
+                );
+            }
+
+            var youtubeService = new YouTubeService(new BaseClientService.Initializer()
+            {
+                HttpClientInitializer = credential,
+                ApplicationName = applicationName
+            });
+
+            var playlistItemsListRequest = youtubeService.PlaylistItems.List("snippet");
+            playlistItemsListRequest.PlaylistId = playlistURL;
+            playlistItemsListRequest.MaxResults = 50;
+
+            var result = new List<VideoModel>();
+            do
+            {
+                var playlistItemsListResponse = await playlistItemsListRequest.ExecuteAsync();
+                foreach (var video in playlistItemsListResponse.Items)
+                {
+                    var videoId = video.Snippet.ResourceId.VideoId;
+                    var videoTitle = video.Snippet.Title;
+                    var videoChannelTitle = video.Snippet.VideoOwnerChannelTitle;
+
+                    var currentVideo = new VideoModel(videoId, videoTitle, videoChannelTitle);
+                    result.Add(currentVideo);
+                }
+                playlistItemsListRequest.PageToken = playlistItemsListResponse.NextPageToken;
+            } while (playlistItemsListRequest.PageToken != null);
+            return result;
+        }
+
+        public async Task UpdateVideoPositionInPlaylist(string playlistURL, int oldIndex, int newIndex, string videoURL)
+        {
+            UserCredential credential;
+            using (var stream = new FileStream(clientSecretPath, FileMode.Open, FileAccess.Read))
+            {
+                credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
+                    GoogleClientSecrets.FromStream(stream).Secrets,
+                    new[] { YouTubeService.Scope.Youtube },
+                    "user",
+                    CancellationToken.None
+                );
+            }
+
+            var youtubeService = new YouTubeService(new BaseClientService.Initializer()
+            {
+                HttpClientInitializer = credential,
+                ApplicationName = applicationName
+            });
+
+            var playlistItemsListRequest = youtubeService.PlaylistItems.List("snippet");
+            playlistItemsListRequest.PlaylistId = playlistURL;
+            playlistItemsListRequest.VideoId = videoURL;
+
+            var playlistItemsListResponse = await playlistItemsListRequest.ExecuteAsync();
+            foreach (var video in playlistItemsListResponse.Items)
+            {
+                var newPlaylistItem = video;
+                newPlaylistItem.Snippet.Position = newIndex;
+                
+                var request = youtubeService.PlaylistItems.Update(newPlaylistItem, "snippet");
+                await request.ExecuteAsync();
+            }
         }
 
         public async Task<VideoModel> InsertVideoIntoPlaylist(string playlistURL, int index, string videoURL)
@@ -93,7 +173,7 @@ namespace YoutubePlaylistAPI
             }
         }
 
-        public async Task LoadPlaylistVideos(string playlistURL)
+        public async Task RemoveVideoFromPlaylist(string playlistURL, int index, string videoURL)
         {
             UserCredential credential;
             using (var stream = new FileStream(clientSecretPath, FileMode.Open, FileAccess.Read))
@@ -114,21 +194,19 @@ namespace YoutubePlaylistAPI
 
             var playlistItemsListRequest = youtubeService.PlaylistItems.List("snippet");
             playlistItemsListRequest.PlaylistId = playlistURL;
-            playlistItemsListRequest.MaxResults = 50;
-            do
-            {
-                var playlistItemsListResponse = await playlistItemsListRequest.ExecuteAsync();
-                foreach (var video in playlistItemsListResponse.Items)
-                {
-                    var videoId = video.Snippet.ResourceId.VideoId;
-                    var videoTitle = video.Snippet.Title;
-                    var videoChannelTitle = video.Snippet.VideoOwnerChannelTitle;
+            playlistItemsListRequest.VideoId = videoURL;
 
-                    var currentVideo = new VideoModel(videoId, videoTitle, videoChannelTitle);
-                    Store.CurrentPlaylist.Add(currentVideo);
+            var playlistItemsListResponse = await playlistItemsListRequest.ExecuteAsync();
+            foreach (var video in playlistItemsListResponse.Items)
+            {
+                var resourceId = video.Id;
+                var position = video.Snippet.Position;
+
+                if (position == index) {
+                    var request = youtubeService.PlaylistItems.Delete(resourceId);
+                    await request.ExecuteAsync();
                 }
-                playlistItemsListRequest.PageToken = playlistItemsListResponse.NextPageToken;
-            } while (playlistItemsListRequest.PageToken != null);
+            }
         }
     }
 }

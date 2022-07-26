@@ -24,7 +24,7 @@ namespace YoutubePlaylistAPI
             {
                 var PlaylistModel = (PlaylistModel)playlistCB.SelectedItem;
                 Store.CurrentPlaylist = PlaylistModel;
-                await Store.LoadPlaylistVideosAsync();
+                await Store.LoadCurrentPlaylistVideosAsync();
                 DialogResult = DialogResult.OK;
             }
         }

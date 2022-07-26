@@ -30,10 +30,11 @@
         {
             this.components = new System.ComponentModel.Container();
             this.playlistDGV = new System.Windows.Forms.DataGridView();
-            this.indexColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.showAddVideoFormButton = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.linkDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.SynchronizeButton = new System.Windows.Forms.Button();
+            this.indexColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.linkDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewLinkColumn();
             this.titleDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.channelDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.videoBindingSource = new System.Windows.Forms.BindingSource(this.components);
@@ -67,16 +68,11 @@
             this.playlistDGV.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.playlistDGV.Size = new System.Drawing.Size(800, 653);
             this.playlistDGV.TabIndex = 1;
+            this.playlistDGV.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.playlistDGV_CellContentClick);
             this.playlistDGV.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.playlistDGV_CellEndEdit);
             this.playlistDGV.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.playlistDGV_CellFormatting);
             this.playlistDGV.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.playlistDGV_CellValidating);
             this.playlistDGV.KeyDown += new System.Windows.Forms.KeyEventHandler(this.playlistDGV_KeyDown);
-            // 
-            // indexColumn
-            // 
-            this.indexColumn.HeaderText = "№";
-            this.indexColumn.MinimumWidth = 50;
-            this.indexColumn.Name = "indexColumn";
             // 
             // showAddVideoFormButton
             // 
@@ -99,6 +95,7 @@
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.SynchronizeButton);
             this.splitContainer1.Panel1.Controls.Add(this.showAddVideoFormButton);
             // 
             // splitContainer1.Panel2
@@ -108,6 +105,23 @@
             this.splitContainer1.SplitterDistance = 43;
             this.splitContainer1.TabIndex = 3;
             // 
+            // SynchronizeButton
+            // 
+            this.SynchronizeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.SynchronizeButton.Location = new System.Drawing.Point(503, 12);
+            this.SynchronizeButton.Name = "SynchronizeButton";
+            this.SynchronizeButton.Size = new System.Drawing.Size(144, 20);
+            this.SynchronizeButton.TabIndex = 3;
+            this.SynchronizeButton.Text = "Synchronize with Youtube";
+            this.SynchronizeButton.UseVisualStyleBackColor = true;
+            this.SynchronizeButton.Click += new System.EventHandler(this.SynchronizeButton_Click);
+            // 
+            // indexColumn
+            // 
+            this.indexColumn.HeaderText = "№";
+            this.indexColumn.MinimumWidth = 50;
+            this.indexColumn.Name = "indexColumn";
+            // 
             // linkDataGridViewTextBoxColumn
             // 
             this.linkDataGridViewTextBoxColumn.DataPropertyName = "Link";
@@ -115,6 +129,8 @@
             this.linkDataGridViewTextBoxColumn.MinimumWidth = 175;
             this.linkDataGridViewTextBoxColumn.Name = "linkDataGridViewTextBoxColumn";
             this.linkDataGridViewTextBoxColumn.ReadOnly = true;
+            this.linkDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.linkDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             // 
             // titleDataGridViewTextBoxColumn
             // 
@@ -164,11 +180,12 @@
         private System.Windows.Forms.BindingSource videoBindingSource;
         private System.Windows.Forms.DataGridView playlistDGV;
         private System.Windows.Forms.Button showAddVideoFormButton;
+        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.Button SynchronizeButton;
         private System.Windows.Forms.DataGridViewTextBoxColumn indexColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn linkDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewLinkColumn linkDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn titleDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn channelDataGridViewTextBoxColumn;
-        private System.Windows.Forms.SplitContainer splitContainer1;
     }
 }
 
