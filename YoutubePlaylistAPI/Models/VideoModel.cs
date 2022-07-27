@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace YoutubePlaylistAPI
 {
-    internal class VideoModel
+    internal class VideoModel //: IBindingListView
     {
         public static readonly string LinkPrefix = @"https://youtu.be/";
         public string Link { get; set; }

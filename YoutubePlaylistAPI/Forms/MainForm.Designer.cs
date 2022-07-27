@@ -34,11 +34,11 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.SynchronizeButton = new System.Windows.Forms.Button();
             this.indexColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.linkDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewLinkColumn();
-            this.titleDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.channelDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.videoBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.stateBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.channelDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.titleDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.linkDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewLinkColumn();
             ((System.ComponentModel.ISupportInitialize)(this.playlistDGV)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -50,6 +50,7 @@
             // 
             // playlistDGV
             // 
+            this.playlistDGV.AllowUserToAddRows = false;
             this.playlistDGV.AutoGenerateColumns = false;
             this.playlistDGV.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.playlistDGV.BackgroundColor = System.Drawing.SystemColors.HighlightText;
@@ -122,23 +123,13 @@
             this.indexColumn.MinimumWidth = 50;
             this.indexColumn.Name = "indexColumn";
             // 
-            // linkDataGridViewTextBoxColumn
+            // videoBindingSource
             // 
-            this.linkDataGridViewTextBoxColumn.DataPropertyName = "Link";
-            this.linkDataGridViewTextBoxColumn.HeaderText = "Link";
-            this.linkDataGridViewTextBoxColumn.MinimumWidth = 175;
-            this.linkDataGridViewTextBoxColumn.Name = "linkDataGridViewTextBoxColumn";
-            this.linkDataGridViewTextBoxColumn.ReadOnly = true;
-            this.linkDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.linkDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.videoBindingSource.DataSource = typeof(YoutubePlaylistAPI.VideoModel);
             // 
-            // titleDataGridViewTextBoxColumn
+            // stateBindingSource
             // 
-            this.titleDataGridViewTextBoxColumn.DataPropertyName = "Title";
-            this.titleDataGridViewTextBoxColumn.HeaderText = "Title";
-            this.titleDataGridViewTextBoxColumn.MinimumWidth = 175;
-            this.titleDataGridViewTextBoxColumn.Name = "titleDataGridViewTextBoxColumn";
-            this.titleDataGridViewTextBoxColumn.ReadOnly = true;
+            this.stateBindingSource.DataSource = typeof(YoutubePlaylistAPI.Store);
             // 
             // channelDataGridViewTextBoxColumn
             // 
@@ -148,13 +139,23 @@
             this.channelDataGridViewTextBoxColumn.Name = "channelDataGridViewTextBoxColumn";
             this.channelDataGridViewTextBoxColumn.ReadOnly = true;
             // 
-            // videoBindingSource
+            // titleDataGridViewTextBoxColumn
             // 
-            this.videoBindingSource.DataSource = typeof(YoutubePlaylistAPI.VideoModel);
+            this.titleDataGridViewTextBoxColumn.DataPropertyName = "Title";
+            this.titleDataGridViewTextBoxColumn.HeaderText = "Title";
+            this.titleDataGridViewTextBoxColumn.MinimumWidth = 175;
+            this.titleDataGridViewTextBoxColumn.Name = "titleDataGridViewTextBoxColumn";
+            this.titleDataGridViewTextBoxColumn.ReadOnly = true;
             // 
-            // stateBindingSource
+            // linkDataGridViewTextBoxColumn
             // 
-            this.stateBindingSource.DataSource = typeof(YoutubePlaylistAPI.Store);
+            this.linkDataGridViewTextBoxColumn.DataPropertyName = "Link";
+            this.linkDataGridViewTextBoxColumn.HeaderText = "Link";
+            this.linkDataGridViewTextBoxColumn.MinimumWidth = 175;
+            this.linkDataGridViewTextBoxColumn.Name = "linkDataGridViewTextBoxColumn";
+            this.linkDataGridViewTextBoxColumn.ReadOnly = true;
+            this.linkDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.linkDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             // 
             // MainForm
             // 

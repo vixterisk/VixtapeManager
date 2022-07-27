@@ -12,6 +12,8 @@ using System.Windows.Forms;
 
 namespace YoutubePlaylistAPI
 {
+    // Log out button
+    // Color selected cells
     // TODO: Add Search
     // Do not loose focus after changes
     public partial class MainForm : Form
@@ -32,10 +34,17 @@ namespace YoutubePlaylistAPI
         void Synchronize()
         {
             if (Store.CurrentPlaylist != null)
-                playlistDGV.DataSource = Store.CurrentPlaylist.GetVideos();
+            //    playlistDGV.DataSource = Store.CurrentPlaylist.GetVideos();
+            {
+                BindingSource bindingSource = new BindingSource();
+                bindingSource.DataSource = Store.CurrentPlaylist.GetVideos();
+                playlistDGV.DataSource = bindingSource;
+
+                var supports = bindingSource.SupportsFiltering;
+                bindingSource.Filter = "channelDataGridViewTextBoxColumn LIKE '%JYP%'";
+            }
         }
 
-        // TODO: Make cells with youtube-link hyperlink
         private void playlistDGV_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             if (Store.CurrentPlaylist == null)
