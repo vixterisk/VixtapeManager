@@ -15,13 +15,13 @@ using System.Threading.Tasks;
 namespace YoutubePlaylistAPI
 {
     // TODO: Make it singleton
-    internal class YoutubeAPIController
+    internal static class YoutubeAPIController
     {
         // TODO: change path to smth normal
         // TODO: протухание токена
         const string clientSecretPath = @"client_secrets.json";
         const string applicationName = "Vixtape Manager";
-        public async Task<List<PlaylistModel>> LoadUserPlaylists()
+        public static async Task<List<PlaylistModel>> LoadUserPlaylists()
         {
             UserCredential credential;
             using (var stream = new FileStream(clientSecretPath, FileMode.Open, FileAccess.Read))
@@ -52,8 +52,9 @@ namespace YoutubePlaylistAPI
                 {
                     var playlistListId = playlist.Id;
                     var playlistListName = playlist.Snippet.Title;
+                    var playlistDescription = playlist.Snippet.Description;
 
-                    var currentPlaylist = new PlaylistModel(playlistListId, playlistListName);
+                    var currentPlaylist = new PlaylistModel(playlistListId, playlistListName, playlistDescription);
                     result.Add(currentPlaylist);
                 }
                 playlistListRequest.PageToken = playlistListResponse.NextPageToken;
@@ -61,7 +62,7 @@ namespace YoutubePlaylistAPI
             return result;
         }
 
-        public async Task<List<VideoModel>> LoadPlaylistVideos(string playlistURL)
+        public static async Task<List<VideoModel>> LoadPlaylistVideos(string playlistURL)
         {
             UserCredential credential;
             using (var stream = new FileStream(clientSecretPath, FileMode.Open, FileAccess.Read))
@@ -102,7 +103,7 @@ namespace YoutubePlaylistAPI
             return result;
         }
 
-        public async Task UpdateVideoPositionInPlaylist(string playlistURL, int oldIndex, int newIndex, string videoURL)
+        public static async Task UpdateVideoPositionInPlaylist(string playlistURL, int oldIndex, int newIndex, string videoURL)
         {
             UserCredential credential;
             using (var stream = new FileStream(clientSecretPath, FileMode.Open, FileAccess.Read))
@@ -136,7 +137,7 @@ namespace YoutubePlaylistAPI
             }
         }
 
-        public async Task<VideoModel> InsertVideoIntoPlaylist(string playlistURL, int index, string videoURL)
+        public static async Task<VideoModel> InsertVideoIntoPlaylist(string playlistURL, int index, string videoURL)
         {
             UserCredential credential;
             using (var stream = new FileStream(clientSecretPath, FileMode.Open, FileAccess.Read))
@@ -173,7 +174,7 @@ namespace YoutubePlaylistAPI
             }
         }
 
-        public async Task RemoveVideoFromPlaylist(string playlistURL, int index, string videoURL)
+        public static async Task RemoveVideoFromPlaylist(string playlistURL, int index, string videoURL)
         {
             UserCredential credential;
             using (var stream = new FileStream(clientSecretPath, FileMode.Open, FileAccess.Read))

@@ -12,12 +12,11 @@ using System.Windows.Forms;
 
 namespace YoutubePlaylistAPI
 {
-    // Log out button
-    // Color selected cells
-    // TODO: Add Search
-    // Do not loose focus after changes
+    // TODO: Color selected cells
     public partial class MainForm : Form
     {
+        List<Tuple<int, int>> filteredItemIndex = new List<Tuple<int, int>>();
+        int currentFilteredItemSelected = 0;
         public MainForm()
         {
             InitializeComponent();
@@ -26,22 +25,36 @@ namespace YoutubePlaylistAPI
 
         private void InitializeForm()
         {
-            var authForm = new AuthForm();
-            authForm.ShowDialog();
-            Synchronize();
+            Authorize();
+        }
+        private void logoutButton_Click(object sender, EventArgs e)
+        {
+            Authorize();
         }
 
-        void Synchronize()
+        private void Authorize()
         {
-            if (Store.CurrentPlaylist != null)
-            //    playlistDGV.DataSource = Store.CurrentPlaylist.GetVideos();
-            {
-                BindingSource bindingSource = new BindingSource();
-                bindingSource.DataSource = Store.CurrentPlaylist.GetVideos();
-                playlistDGV.DataSource = bindingSource;
+            var authForm = new AuthForm();
+            authForm.ShowDialog();
+            Synchronize(0);
+            arrowButtonLeft.Enabled = false;
+            arrowButtonRight.Enabled = false;
+        }
 
-                var supports = bindingSource.SupportsFiltering;
-                bindingSource.Filter = "channelDataGridViewTextBoxColumn LIKE '%JYP%'";
+        void Synchronize(int rowToFocus)
+        {
+            var playlistIsNotEmpty = Store.CurrentPlaylist != null;
+            showAddVideoFormButton.Enabled = playlistIsNotEmpty;
+            SynchronizeButton.Enabled = playlistIsNotEmpty;
+            if (playlistIsNotEmpty)
+            {
+                playlistGB.Text = String.Format(@"Current playlist: {0} (https://www.youtube.com/playlist?list={1})", Store.CurrentPlaylist.Title, Store.CurrentPlaylist.Link);
+                descriptionRTB.Text = Store.CurrentPlaylist.Description;
+                BindingSource bindingSource = new BindingSource();
+                bindingSource.DataSource = Store.CurrentPlaylist;
+                playlistDGV.DataSource = bindingSource;
+                if (Store.CurrentPlaylist.Count > 0)
+                    playlistDGV.CurrentCell = playlistDGV.Rows[rowToFocus].Cells[0];
             }
         }
 
@@ -68,9 +81,10 @@ namespace YoutubePlaylistAPI
                 await Store.MoveToNewPositionInCurrentPlaylist(oldIndex, newIndex, VideoModel.LinkWithoutPrefix(videoURL));
             }
             catch (Exception ex) {
-                MessageBox.Show(String.Format("Unable To Move Video \n({0})", string.Join("\n", ex.Message)), "Error");
+                MessageBox.Show(String.Format("Unable To Move Video.\n({0})", string.Join("\n", ex.Message)), "Error");
+                return;
             }
-            Synchronize();
+            Synchronize(newIndex);
         }
 
         private void playlistDGV_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
@@ -95,7 +109,8 @@ namespace YoutubePlaylistAPI
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(String.Format("Unable To Add Video \n({0})", string.Join("\n", ex.Message)), "Error");
+                        MessageBox.Show(String.Format("Unable To Add Video.\n({0})", string.Join("\n", ex.Message)), "Error");
+                        return;
                     }
                 }
                 else
@@ -106,10 +121,11 @@ namespace YoutubePlaylistAPI
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(String.Format("Unable To Insert Video \n({0})", string.Join("\n", ex.Message)), "Error");
+                        MessageBox.Show(String.Format("Unable To Insert Video.\n({0})", string.Join("\n", ex.Message)), "Error");
+                        return;
                     }
                 }
-                Synchronize();
+                Synchronize(index);
             }
             addVideoForm.Dispose();
         }
@@ -126,21 +142,24 @@ namespace YoutubePlaylistAPI
                     var videoURL = playlistDGV.Rows[currentSelectedRow].Cells["linkDataGridViewTextBoxColumn"].Value.ToString();
                     try
                     {
-                        await Store.RemoveFromCurrentPlaylist(currentSelectedRow, VideoModel.LinkWithoutPrefix(videoURL));
+                        await Store.RemoveFromCurrentPlaylist(currentSelectedRow, videoURL);
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(String.Format("Unable To Remove Video \n({0})", string.Join("\n", ex.Message)), "Error");
+                        MessageBox.Show(String.Format("Unable To Remove Video.\n({0})", string.Join("\n", ex.Message)), "Error");
+                        return;
                     }
                 }
-                Synchronize();
+                var minSelectedRow = Math.Max(0, Math.Min(selectedRows.Min(), Store.CurrentPlaylist.Count - 1));
+                    Synchronize(minSelectedRow);
             }
         }
 
         private async void SynchronizeButton_Click(object sender, EventArgs e)
         {
-            await Store.LoadCurrentPlaylistVideosAsync();
-            Synchronize();
+            var selectedRow = playlistDGV.SelectedCells[0].RowIndex;
+            await Store.LoadCurrentPlaylistVideosAsync(Store.CurrentPlaylist);
+            Synchronize(selectedRow);
         }
 
         private void playlistDGV_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -155,9 +174,60 @@ namespace YoutubePlaylistAPI
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(String.Format("Unable To Open Video \n({0})", string.Join("\n", ex.Message)), "Error");
+                    MessageBox.Show(String.Format("Unable To Open Video.\n({0})", string.Join("\n", ex.Message)), "Error");
+                    return;
                 }
             }
+        }
+
+        private void searchTB_TextChanged(object sender, EventArgs e)
+        {
+            filteredItemIndex.Clear();
+
+            if (string.IsNullOrWhiteSpace(searchTB.Text))
+                return;
+
+            var seekValue = searchTB.Text.ToLower();
+
+            var result = new List<Tuple<int, int>>();
+            for (int i = 0; i < playlistDGV.RowCount; i++)
+            {
+                var row = playlistDGV.Rows[i];
+                foreach (DataGridViewCell cell in row.Cells)
+                {
+                    var cellValue = cell.EditedFormattedValue.ToString();
+                    if (cellValue.ToLower().Contains(seekValue))
+                        result.Add(new Tuple<int, int>(i, cell.ColumnIndex));
+                }
+            }
+            filteredItemIndex = result.Distinct().ToList();
+            if (filteredItemIndex.Count > 0)
+            {
+                var firstFilteredRow = filteredItemIndex[0].Item1;
+                var firstFilteredCell = filteredItemIndex[0].Item2;
+                playlistDGV.CurrentCell = playlistDGV.Rows[firstFilteredRow].Cells[firstFilteredCell];
+            }
+            arrowButtonRight.Enabled = filteredItemIndex.Count > 1;
+        }
+
+        private void arrowButtonLeft_Click(object sender, EventArgs e)
+        {
+            currentFilteredItemSelected--;
+            SelectNextFilteredItem();
+        }
+
+        private void arrowButtonRight_Click(object sender, EventArgs e)
+        {
+            currentFilteredItemSelected++;
+            SelectNextFilteredItem();
+        }
+        private void SelectNextFilteredItem()
+        {
+            var firstFilteredRow = filteredItemIndex[currentFilteredItemSelected].Item1;
+            var firstFilteredCell = filteredItemIndex[currentFilteredItemSelected].Item2;
+            playlistDGV.CurrentCell = playlistDGV.Rows[firstFilteredRow].Cells[firstFilteredCell];
+            arrowButtonLeft.Enabled = currentFilteredItemSelected > 0;
+            arrowButtonRight.Enabled = filteredItemIndex.Count - 1 > currentFilteredItemSelected;
         }
     }
 }

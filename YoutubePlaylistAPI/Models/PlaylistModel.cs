@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace YoutubePlaylistAPI
 {
-    internal class PlaylistModel
+    internal class PlaylistModel : IList
     {
         /// <summary>
         /// Returns url of the youtube-playlist.
@@ -17,76 +18,112 @@ namespace YoutubePlaylistAPI
         /// </summary>
         public string Title { get; set; }
         /// <summary>
+        /// Returns the description of the playlist.
+        /// </summary>
+        public string Description { get; set; }
+        /// <summary>
         /// Returns the number of videos in the playlist.
         /// </summary>
-        public int Count { get { return videos.Count; } }
+        public int Count => videos.Count;
+
+        public bool IsReadOnly => false;
+
+        public bool IsFixedSize => false;
+        // TODO: ?
+        public object SyncRoot => this;
+        // TODO: ?
+        public bool IsSynchronized => true;
+
+        object IList.this[int index] { get => videos[index]; set { videos[index] = (VideoModel)value; } }
 
         List<VideoModel> videos = new List<VideoModel>();
         public PlaylistModel()
         {
         }
-        public PlaylistModel(string link, string title)
+
+        public PlaylistModel(string link, string title, string description)
         {
             Link = link;
             Title = title;
+            Description = description;
         }
-        public PlaylistModel(string link, List<VideoModel> videos)
+
+        public PlaylistModel(string link, string title, string description, List<VideoModel> videos) : this(link, title, description)
         {
-            Link = link;
             this.videos = videos;
         }
 
-        public PlaylistModel(string link, string title, List<VideoModel> videos)
+        public override string ToString()
         {
-            Link = link;
-            Title = title;
-            this.videos = videos;
-        }
-
-        public VideoModel this[int index]
-        {
-            get { 
-                return videos[index]; 
-            }
-            set { 
-                videos[index] = value; 
-            }
+            return Title.ToString() + @", https://www.youtube.com/playlist?list=" + Link.ToString();
         }
 
         /// <summary>
-        /// Adds a video at the end of the playlist.
+        /// Adds a video at the end of the playlist. Returns index of the element if successful and -1 otherwise.
         /// </summary>
-        public void Add(VideoModel video)
+        public int Add(Object value)
         {
-            if (video == null)
-                throw new VideoNullException("Video was null.");
-            videos.Add(video);
+            if (value == null || !(value is VideoModel))
+                return -1;
+            videos.Add((VideoModel)value);
+            return videos.Count;
+        }
+
+        public bool Contains(Object value)
+        {
+            return videos.Contains(value);
+        }
+
+        public void Clear()
+        {
+            videos.Clear();
+        }
+
+        public int IndexOf(Object value)
+        {
+            return videos.IndexOf((VideoModel)value);
         }
 
         /// <summary>
         /// Inserts a video into the playlist at the specified index.
         /// </summary>
         /// <exception cref="IndexOutOfRangeException"></exception>
-        public void Insert(int index, VideoModel video)
+        public void Insert(int index, object value)
         {
             if (index < 0 || index > videos.Count)
             {
                 throw new IndexOutOfRangeException("Video Index was invalid.");
             }
-            videos.Insert(index, video);
+            videos.Insert(index, (VideoModel)value);
         }
-
+        /// <summary>
+        /// Removes a video from the playlist.
+        /// </summary>
+        public void Remove(Object value)
+        {
+            videos.Remove((VideoModel)value);
+        }
         /// <summary>
         /// Removes a video from the playlist at the specified index.
         /// </summary>
         /// <exception cref="IndexOutOfRangeException"></exception>
-        public void Remove(int index)
+        public void RemoveAt(int index)
         {
             if (index < 0 || index > videos.Count)
             {
                 throw new IndexOutOfRangeException("Video Index was invalid.");
             }
             videos.RemoveAt(index);
+        }
+
+        public void CopyTo(Array array, int index)
+        {
+            videos.CopyTo((VideoModel[])array, index);
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return null;
         }
 
         /// <summary>
@@ -116,17 +153,13 @@ namespace YoutubePlaylistAPI
             try
             {
                 var video = videos[oldIndex];
-                Remove(oldIndex);
+                RemoveAt(oldIndex);
                 Insert(newIndex, video);
             }
             catch (IndexOutOfRangeException e)
             {
                 throw new IndexOutOfRangeException(e.Message);
             }
-        }
-        public override string ToString()
-        {
-            return Title.ToString() + @", https://www.youtube.com/playlist?list=" + Link.ToString();
         }
     }
 }

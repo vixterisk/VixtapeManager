@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AddVideoForm));
             this.urlTB = new System.Windows.Forms.TextBox();
             this.specifiedIndexCheckBox = new System.Windows.Forms.CheckBox();
             this.indexComboBox = new System.Windows.Forms.ComboBox();
@@ -94,6 +95,7 @@
             this.Controls.Add(this.specifiedIndexCheckBox);
             this.Controls.Add(this.urlTB);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "AddVideoForm";
             this.Text = "Add Video To Playlist";
             this.ResumeLayout(false);

@@ -11,27 +11,24 @@ namespace YoutubePlaylistAPI
         public static List<PlaylistModel> UsersPlaylist { get; set; }
         public static PlaylistModel CurrentPlaylist { get; set; }
 
-        internal static async Task LoadCurrentPlaylistVideosAsync()
+        internal static async Task LoadCurrentPlaylistVideosAsync(PlaylistModel playlistModel)
         {
-            var controller = new YoutubeAPIController();
-            var videos = await controller.LoadPlaylistVideos(CurrentPlaylist.Link);
-            CurrentPlaylist = new PlaylistModel(CurrentPlaylist.Link, videos);
+            var videos = await YoutubeAPIController.LoadPlaylistVideos(playlistModel.Link);
+            CurrentPlaylist = new PlaylistModel(playlistModel.Link, playlistModel.Title, playlistModel.Description, videos);
         }
 
         internal static async Task LoadUserPlaylistsAsync()
         {
             UsersPlaylist = new List<PlaylistModel>();
-            var controller = new YoutubeAPIController();
-            UsersPlaylist = await controller.LoadUserPlaylists();
+            UsersPlaylist = await YoutubeAPIController.LoadUserPlaylists();
         }
 
         public static async Task RemoveFromCurrentPlaylist(int index, string videoURL)
         {
-            var controller = new YoutubeAPIController();
             try
             {
-                await controller.RemoveVideoFromPlaylist(CurrentPlaylist.Link, index, videoURL);
-                CurrentPlaylist.Remove(index);
+                await YoutubeAPIController.RemoveVideoFromPlaylist(CurrentPlaylist.Link, index, videoURL);
+                CurrentPlaylist.RemoveAt(index);
             }
             catch (Exception e)
             {
@@ -40,10 +37,9 @@ namespace YoutubePlaylistAPI
         }
         public static async Task AddToCurrentPlaylistAsync(string videoURL)
         {
-            var controller = new YoutubeAPIController(); 
             try
             {
-                var video = await controller.InsertVideoIntoPlaylist(CurrentPlaylist.Link, CurrentPlaylist.Count, videoURL);
+                var video = await YoutubeAPIController.InsertVideoIntoPlaylist(CurrentPlaylist.Link, CurrentPlaylist.Count, videoURL);
                 CurrentPlaylist.Add(video);
             }
             catch (Exception e)
@@ -54,10 +50,9 @@ namespace YoutubePlaylistAPI
 
         public static async Task InsertIntoCurrentPlaylistAsync(int index, string videoURL)
         {
-            var controller = new YoutubeAPIController();
             try
             {
-                var video = await controller.InsertVideoIntoPlaylist(CurrentPlaylist.Link, index, videoURL);
+                var video = await YoutubeAPIController.InsertVideoIntoPlaylist(CurrentPlaylist.Link, index, videoURL);
                 CurrentPlaylist.Insert(index, video);
             }
             catch (Exception e)
@@ -68,10 +63,9 @@ namespace YoutubePlaylistAPI
 
         internal static async Task MoveToNewPositionInCurrentPlaylist(int oldIndex, int newIndex, string videoURL)
         {
-            var controller = new YoutubeAPIController();
             try
             {
-                await controller.UpdateVideoPositionInPlaylist(CurrentPlaylist.Link, oldIndex, newIndex, videoURL);
+                await YoutubeAPIController.UpdateVideoPositionInPlaylist(CurrentPlaylist.Link, oldIndex, newIndex, videoURL);
                 CurrentPlaylist.Move(oldIndex, newIndex);
             }
             catch (Exception e)
