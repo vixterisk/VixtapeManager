@@ -144,24 +144,7 @@ namespace YoutubePlaylistAPI
         {
             if (e.KeyCode == Keys.Delete)
             {
-                var selectedCells = new DataGridViewCell[playlistDGV.SelectedCells.Count];
-                playlistDGV.SelectedCells.CopyTo(selectedCells, 0);
-                var selectedRows = selectedCells.Select(x => x.RowIndex).Distinct().ToList().OrderByDescending(x => x);
-                foreach (var currentSelectedRow in selectedRows)
-                {
-                    var videoURL = playlistDGV.Rows[currentSelectedRow].Cells["linkDataGridViewTextBoxColumn"].Value.ToString();
-                    try
-                    {
-                        await Store.RemoveFromCurrentPlaylist(currentSelectedRow, videoURL);
-                    }
-                    catch (Exception ex)
-                    {
-                        ShowErrorMessage("remove", ex.Message);
-                        return;
-                    }
-                }
-                var minSelectedRow = Math.Max(0, Math.Min(selectedRows.Min(), Store.CurrentPlaylist.Count - 1));
-                    Synchronize(minSelectedRow);
+                await DeleteVideo(sender, e);
             }
         }
 
@@ -267,6 +250,33 @@ namespace YoutubePlaylistAPI
             {
                 MessageBox.Show(ex.Message, "Error");
             }
+        }
+
+        private async void DeleteVideoButton_Click(object sender, EventArgs e)
+        {
+            await DeleteVideo(sender, e);
+        }
+
+        async Task DeleteVideo(object sender, EventArgs e)
+        {
+            var selectedCells = new DataGridViewCell[playlistDGV.SelectedCells.Count];
+            playlistDGV.SelectedCells.CopyTo(selectedCells, 0);
+            var selectedRows = selectedCells.Select(x => x.RowIndex).Distinct().ToList().OrderByDescending(x => x);
+            foreach (var currentSelectedRow in selectedRows)
+            {
+                var videoURL = playlistDGV.Rows[currentSelectedRow].Cells["linkDataGridViewTextBoxColumn"].Value.ToString();
+                try
+                {
+                    await Store.RemoveFromCurrentPlaylist(currentSelectedRow, videoURL);
+                }
+                catch (Exception ex)
+                {
+                    ShowErrorMessage("remove", ex.Message);
+                    return;
+                }
+            }
+            var minSelectedRow = Math.Max(0, Math.Min(selectedRows.Min(), Store.CurrentPlaylist.Count - 1));
+            Synchronize(minSelectedRow);
         }
     }
 }

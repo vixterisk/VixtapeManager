@@ -21,8 +21,7 @@ namespace YoutubePlaylistAPI
         const string applicationName = "Vixtape Manager";
 
         public static readonly string LinkPrefix = @"https://youtu.be/";
-        // TODO: private
-        public static string LinkWithoutPrefix(string link)
+        private static string LinkWithoutPrefix(string link)
         {
             if (link == null)
                 throw new ArgumentNullException();

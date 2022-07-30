@@ -32,10 +32,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.playlistDGV = new System.Windows.Forms.DataGridView();
             this.indexColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.linkDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewLinkColumn();
-            this.titleDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.channelDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.videoBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.showAddVideoFormButton = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.playlistGB = new System.Windows.Forms.GroupBox();
@@ -49,10 +45,14 @@
             this.arrowButtonLeft = new System.Windows.Forms.Button();
             this.arrowButtonRight = new System.Windows.Forms.Button();
             this.searchTB = new System.Windows.Forms.TextBox();
-            this.stateBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.ExportToCSVButton = new System.Windows.Forms.Button();
+            this.linkDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewLinkColumn();
+            this.titleDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.channelDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.videoBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.stateBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.DeleteVideoButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.playlistDGV)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.videoBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -62,6 +62,7 @@
             this.descriptionTabPage.SuspendLayout();
             this.actionsTabPage.SuspendLayout();
             this.searchTabPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.videoBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.stateBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -97,36 +98,6 @@
             this.indexColumn.HeaderText = "№";
             this.indexColumn.MinimumWidth = 50;
             this.indexColumn.Name = "indexColumn";
-            // 
-            // linkDataGridViewTextBoxColumn
-            // 
-            this.linkDataGridViewTextBoxColumn.DataPropertyName = "Link";
-            this.linkDataGridViewTextBoxColumn.HeaderText = "Link";
-            this.linkDataGridViewTextBoxColumn.MinimumWidth = 175;
-            this.linkDataGridViewTextBoxColumn.Name = "linkDataGridViewTextBoxColumn";
-            this.linkDataGridViewTextBoxColumn.ReadOnly = true;
-            this.linkDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.linkDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
-            // titleDataGridViewTextBoxColumn
-            // 
-            this.titleDataGridViewTextBoxColumn.DataPropertyName = "Title";
-            this.titleDataGridViewTextBoxColumn.HeaderText = "Title";
-            this.titleDataGridViewTextBoxColumn.MinimumWidth = 175;
-            this.titleDataGridViewTextBoxColumn.Name = "titleDataGridViewTextBoxColumn";
-            this.titleDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // channelDataGridViewTextBoxColumn
-            // 
-            this.channelDataGridViewTextBoxColumn.DataPropertyName = "Channel";
-            this.channelDataGridViewTextBoxColumn.HeaderText = "Channel";
-            this.channelDataGridViewTextBoxColumn.MinimumWidth = 175;
-            this.channelDataGridViewTextBoxColumn.Name = "channelDataGridViewTextBoxColumn";
-            this.channelDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // videoBindingSource
-            // 
-            this.videoBindingSource.DataSource = typeof(YoutubePlaylistAPI.VideoModel);
             // 
             // showAddVideoFormButton
             // 
@@ -205,6 +176,7 @@
             // 
             // actionsTabPage
             // 
+            this.actionsTabPage.Controls.Add(this.DeleteVideoButton);
             this.actionsTabPage.Controls.Add(this.ExportToCSVButton);
             this.actionsTabPage.Controls.Add(this.logoutButton);
             this.actionsTabPage.Controls.Add(this.showAddVideoFormButton);
@@ -221,9 +193,9 @@
             // 
             this.logoutButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.logoutButton.Location = new System.Drawing.Point(829, 37);
+            this.logoutButton.Location = new System.Drawing.Point(312, 6);
             this.logoutButton.Name = "logoutButton";
-            this.logoutButton.Size = new System.Drawing.Size(147, 23);
+            this.logoutButton.Size = new System.Drawing.Size(147, 25);
             this.logoutButton.TabIndex = 3;
             this.logoutButton.Text = "Log Out";
             this.logoutButton.UseVisualStyleBackColor = true;
@@ -233,7 +205,7 @@
             // 
             this.SynchronizeButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.SynchronizeButton.Location = new System.Drawing.Point(829, 6);
+            this.SynchronizeButton.Location = new System.Drawing.Point(159, 6);
             this.SynchronizeButton.Name = "SynchronizeButton";
             this.SynchronizeButton.Size = new System.Drawing.Size(147, 25);
             this.SynchronizeButton.TabIndex = 3;
@@ -282,21 +254,63 @@
             this.searchTB.TabIndex = 0;
             this.searchTB.TextChanged += new System.EventHandler(this.searchTB_TextChanged);
             // 
-            // stateBindingSource
-            // 
-            this.stateBindingSource.DataSource = typeof(YoutubePlaylistAPI.Store);
-            // 
             // ExportToCSVButton
             // 
             this.ExportToCSVButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.ExportToCSVButton.Location = new System.Drawing.Point(6, 35);
+            this.ExportToCSVButton.Location = new System.Drawing.Point(159, 35);
             this.ExportToCSVButton.Name = "ExportToCSVButton";
             this.ExportToCSVButton.Size = new System.Drawing.Size(147, 25);
             this.ExportToCSVButton.TabIndex = 4;
             this.ExportToCSVButton.Text = "Export To CSV";
             this.ExportToCSVButton.UseVisualStyleBackColor = true;
             this.ExportToCSVButton.Click += new System.EventHandler(this.ExportToCSVButton_Click);
+            // 
+            // linkDataGridViewTextBoxColumn
+            // 
+            this.linkDataGridViewTextBoxColumn.DataPropertyName = "Link";
+            this.linkDataGridViewTextBoxColumn.HeaderText = "Link";
+            this.linkDataGridViewTextBoxColumn.MinimumWidth = 175;
+            this.linkDataGridViewTextBoxColumn.Name = "linkDataGridViewTextBoxColumn";
+            this.linkDataGridViewTextBoxColumn.ReadOnly = true;
+            this.linkDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.linkDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // titleDataGridViewTextBoxColumn
+            // 
+            this.titleDataGridViewTextBoxColumn.DataPropertyName = "Title";
+            this.titleDataGridViewTextBoxColumn.HeaderText = "Title";
+            this.titleDataGridViewTextBoxColumn.MinimumWidth = 175;
+            this.titleDataGridViewTextBoxColumn.Name = "titleDataGridViewTextBoxColumn";
+            this.titleDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // channelDataGridViewTextBoxColumn
+            // 
+            this.channelDataGridViewTextBoxColumn.DataPropertyName = "Channel";
+            this.channelDataGridViewTextBoxColumn.HeaderText = "Channel";
+            this.channelDataGridViewTextBoxColumn.MinimumWidth = 175;
+            this.channelDataGridViewTextBoxColumn.Name = "channelDataGridViewTextBoxColumn";
+            this.channelDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // videoBindingSource
+            // 
+            this.videoBindingSource.DataSource = typeof(YoutubePlaylistAPI.VideoModel);
+            // 
+            // stateBindingSource
+            // 
+            this.stateBindingSource.DataSource = typeof(YoutubePlaylistAPI.Store);
+            // 
+            // DeleteVideoButton
+            // 
+            this.DeleteVideoButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.DeleteVideoButton.Location = new System.Drawing.Point(6, 35);
+            this.DeleteVideoButton.Name = "DeleteVideoButton";
+            this.DeleteVideoButton.Size = new System.Drawing.Size(147, 25);
+            this.DeleteVideoButton.TabIndex = 5;
+            this.DeleteVideoButton.Text = "Delete Video From Playlist";
+            this.DeleteVideoButton.UseVisualStyleBackColor = true;
+            this.DeleteVideoButton.Click += new System.EventHandler(this.DeleteVideoButton_Click);
             // 
             // MainForm
             // 
@@ -309,7 +323,6 @@
             this.Name = "MainForm";
             this.Text = "Vixtape Manager";
             ((System.ComponentModel.ISupportInitialize)(this.playlistDGV)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.videoBindingSource)).EndInit();
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
@@ -320,6 +333,7 @@
             this.actionsTabPage.ResumeLayout(false);
             this.searchTabPage.ResumeLayout(false);
             this.searchTabPage.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.videoBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.stateBindingSource)).EndInit();
             this.ResumeLayout(false);
 
@@ -347,6 +361,7 @@
         private System.Windows.Forms.TabPage actionsTabPage;
         private System.Windows.Forms.TabPage searchTabPage;
         private System.Windows.Forms.Button ExportToCSVButton;
+        private System.Windows.Forms.Button DeleteVideoButton;
     }
 }
 
