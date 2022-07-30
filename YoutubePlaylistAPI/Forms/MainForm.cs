@@ -1,9 +1,13 @@
-﻿using System;
+﻿using CsvHelper;
+using CsvHelper.Configuration;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -234,6 +238,35 @@ namespace YoutubePlaylistAPI
             playlistDGV.CurrentCell = playlistDGV.Rows[firstFilteredRow].Cells[firstFilteredCell];
             arrowButtonLeft.Enabled = currentFilteredItemSelected > 0;
             arrowButtonRight.Enabled = filteredItemIndex.Count - 1 > currentFilteredItemSelected;
+        }
+        private void ExportToCSVButton_Click(object sender, EventArgs e)
+        {
+            var records = Store.CurrentPlaylist.GetVideos();
+
+            try
+            {
+                using (var openFileDialog = new SaveFileDialog())
+                {
+                    openFileDialog.FileName = Store.CurrentPlaylist.Title;
+                    openFileDialog.Filter = "csv files (*.csv)|*.csv";
+                    openFileDialog.RestoreDirectory = true;
+
+                    if (openFileDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        var filePath = openFileDialog.FileName;
+                        var fileStream = openFileDialog.OpenFile();
+                        using (var writer = new StreamWriter(fileStream))
+                        using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+                        {
+                            csv.WriteRecords(records);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error");
+            }
         }
     }
 }

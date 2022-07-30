@@ -32,25 +32,27 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.playlistDGV = new System.Windows.Forms.DataGridView();
             this.indexColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.showAddVideoFormButton = new System.Windows.Forms.Button();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.logoutButton = new System.Windows.Forms.Button();
-            this.arrowButtonLeft = new System.Windows.Forms.Button();
-            this.arrowButtonRight = new System.Windows.Forms.Button();
-            this.searchTB = new System.Windows.Forms.TextBox();
-            this.SynchronizeButton = new System.Windows.Forms.Button();
-            this.playlistGB = new System.Windows.Forms.GroupBox();
-            this.descriptionRTB = new System.Windows.Forms.RichTextBox();
-            this.menuTabControl = new System.Windows.Forms.TabControl();
-            this.descriptionTabPage = new System.Windows.Forms.TabPage();
-            this.actionsTabPage = new System.Windows.Forms.TabPage();
-            this.searchTabPage = new System.Windows.Forms.TabPage();
             this.linkDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewLinkColumn();
             this.titleDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.channelDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.videoBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.showAddVideoFormButton = new System.Windows.Forms.Button();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.playlistGB = new System.Windows.Forms.GroupBox();
+            this.menuTabControl = new System.Windows.Forms.TabControl();
+            this.descriptionTabPage = new System.Windows.Forms.TabPage();
+            this.descriptionRTB = new System.Windows.Forms.RichTextBox();
+            this.actionsTabPage = new System.Windows.Forms.TabPage();
+            this.logoutButton = new System.Windows.Forms.Button();
+            this.SynchronizeButton = new System.Windows.Forms.Button();
+            this.searchTabPage = new System.Windows.Forms.TabPage();
+            this.arrowButtonLeft = new System.Windows.Forms.Button();
+            this.arrowButtonRight = new System.Windows.Forms.Button();
+            this.searchTB = new System.Windows.Forms.TextBox();
             this.stateBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.ExportToCSVButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.playlistDGV)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.videoBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -60,7 +62,6 @@
             this.descriptionTabPage.SuspendLayout();
             this.actionsTabPage.SuspendLayout();
             this.searchTabPage.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.videoBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.stateBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -97,6 +98,36 @@
             this.indexColumn.MinimumWidth = 50;
             this.indexColumn.Name = "indexColumn";
             // 
+            // linkDataGridViewTextBoxColumn
+            // 
+            this.linkDataGridViewTextBoxColumn.DataPropertyName = "Link";
+            this.linkDataGridViewTextBoxColumn.HeaderText = "Link";
+            this.linkDataGridViewTextBoxColumn.MinimumWidth = 175;
+            this.linkDataGridViewTextBoxColumn.Name = "linkDataGridViewTextBoxColumn";
+            this.linkDataGridViewTextBoxColumn.ReadOnly = true;
+            this.linkDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.linkDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // titleDataGridViewTextBoxColumn
+            // 
+            this.titleDataGridViewTextBoxColumn.DataPropertyName = "Title";
+            this.titleDataGridViewTextBoxColumn.HeaderText = "Title";
+            this.titleDataGridViewTextBoxColumn.MinimumWidth = 175;
+            this.titleDataGridViewTextBoxColumn.Name = "titleDataGridViewTextBoxColumn";
+            this.titleDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // channelDataGridViewTextBoxColumn
+            // 
+            this.channelDataGridViewTextBoxColumn.DataPropertyName = "Channel";
+            this.channelDataGridViewTextBoxColumn.HeaderText = "Channel";
+            this.channelDataGridViewTextBoxColumn.MinimumWidth = 175;
+            this.channelDataGridViewTextBoxColumn.Name = "channelDataGridViewTextBoxColumn";
+            this.channelDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // videoBindingSource
+            // 
+            this.videoBindingSource.DataSource = typeof(YoutubePlaylistAPI.VideoModel);
+            // 
             // showAddVideoFormButton
             // 
             this.showAddVideoFormButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -128,6 +159,64 @@
             this.splitContainer1.SplitterDistance = 111;
             this.splitContainer1.TabIndex = 3;
             // 
+            // playlistGB
+            // 
+            this.playlistGB.Controls.Add(this.menuTabControl);
+            this.playlistGB.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.playlistGB.Location = new System.Drawing.Point(0, 0);
+            this.playlistGB.Name = "playlistGB";
+            this.playlistGB.Size = new System.Drawing.Size(993, 111);
+            this.playlistGB.TabIndex = 5;
+            this.playlistGB.TabStop = false;
+            this.playlistGB.Text = "Current playlist:";
+            // 
+            // menuTabControl
+            // 
+            this.menuTabControl.Controls.Add(this.descriptionTabPage);
+            this.menuTabControl.Controls.Add(this.actionsTabPage);
+            this.menuTabControl.Controls.Add(this.searchTabPage);
+            this.menuTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.menuTabControl.Location = new System.Drawing.Point(3, 16);
+            this.menuTabControl.Name = "menuTabControl";
+            this.menuTabControl.SelectedIndex = 0;
+            this.menuTabControl.Size = new System.Drawing.Size(987, 92);
+            this.menuTabControl.TabIndex = 4;
+            // 
+            // descriptionTabPage
+            // 
+            this.descriptionTabPage.Controls.Add(this.descriptionRTB);
+            this.descriptionTabPage.Location = new System.Drawing.Point(4, 22);
+            this.descriptionTabPage.Name = "descriptionTabPage";
+            this.descriptionTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.descriptionTabPage.Size = new System.Drawing.Size(979, 66);
+            this.descriptionTabPage.TabIndex = 0;
+            this.descriptionTabPage.Text = "Description";
+            this.descriptionTabPage.UseVisualStyleBackColor = true;
+            // 
+            // descriptionRTB
+            // 
+            this.descriptionRTB.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.descriptionRTB.Enabled = false;
+            this.descriptionRTB.Location = new System.Drawing.Point(3, 3);
+            this.descriptionRTB.Name = "descriptionRTB";
+            this.descriptionRTB.Size = new System.Drawing.Size(973, 60);
+            this.descriptionRTB.TabIndex = 5;
+            this.descriptionRTB.Text = "";
+            // 
+            // actionsTabPage
+            // 
+            this.actionsTabPage.Controls.Add(this.ExportToCSVButton);
+            this.actionsTabPage.Controls.Add(this.logoutButton);
+            this.actionsTabPage.Controls.Add(this.showAddVideoFormButton);
+            this.actionsTabPage.Controls.Add(this.SynchronizeButton);
+            this.actionsTabPage.Location = new System.Drawing.Point(4, 22);
+            this.actionsTabPage.Name = "actionsTabPage";
+            this.actionsTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.actionsTabPage.Size = new System.Drawing.Size(979, 66);
+            this.actionsTabPage.TabIndex = 1;
+            this.actionsTabPage.Text = "Actions";
+            this.actionsTabPage.UseVisualStyleBackColor = true;
+            // 
             // logoutButton
             // 
             this.logoutButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -139,6 +228,31 @@
             this.logoutButton.Text = "Log Out";
             this.logoutButton.UseVisualStyleBackColor = true;
             this.logoutButton.Click += new System.EventHandler(this.logoutButton_Click);
+            // 
+            // SynchronizeButton
+            // 
+            this.SynchronizeButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.SynchronizeButton.Location = new System.Drawing.Point(829, 6);
+            this.SynchronizeButton.Name = "SynchronizeButton";
+            this.SynchronizeButton.Size = new System.Drawing.Size(147, 25);
+            this.SynchronizeButton.TabIndex = 3;
+            this.SynchronizeButton.Text = "Synchronize with Youtube";
+            this.SynchronizeButton.UseVisualStyleBackColor = true;
+            this.SynchronizeButton.Click += new System.EventHandler(this.SynchronizeButton_Click);
+            // 
+            // searchTabPage
+            // 
+            this.searchTabPage.Controls.Add(this.arrowButtonLeft);
+            this.searchTabPage.Controls.Add(this.arrowButtonRight);
+            this.searchTabPage.Controls.Add(this.searchTB);
+            this.searchTabPage.Location = new System.Drawing.Point(4, 22);
+            this.searchTabPage.Name = "searchTabPage";
+            this.searchTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.searchTabPage.Size = new System.Drawing.Size(979, 66);
+            this.searchTabPage.TabIndex = 2;
+            this.searchTabPage.Text = "Search";
+            this.searchTabPage.UseVisualStyleBackColor = true;
             // 
             // arrowButtonLeft
             // 
@@ -168,121 +282,21 @@
             this.searchTB.TabIndex = 0;
             this.searchTB.TextChanged += new System.EventHandler(this.searchTB_TextChanged);
             // 
-            // SynchronizeButton
-            // 
-            this.SynchronizeButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.SynchronizeButton.Location = new System.Drawing.Point(829, 6);
-            this.SynchronizeButton.Name = "SynchronizeButton";
-            this.SynchronizeButton.Size = new System.Drawing.Size(147, 25);
-            this.SynchronizeButton.TabIndex = 3;
-            this.SynchronizeButton.Text = "Synchronize with Youtube";
-            this.SynchronizeButton.UseVisualStyleBackColor = true;
-            this.SynchronizeButton.Click += new System.EventHandler(this.SynchronizeButton_Click);
-            // 
-            // playlistGB
-            // 
-            this.playlistGB.Controls.Add(this.menuTabControl);
-            this.playlistGB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.playlistGB.Location = new System.Drawing.Point(0, 0);
-            this.playlistGB.Name = "playlistGB";
-            this.playlistGB.Size = new System.Drawing.Size(993, 111);
-            this.playlistGB.TabIndex = 5;
-            this.playlistGB.TabStop = false;
-            this.playlistGB.Text = "Current playlist:";
-            // 
-            // descriptionRTB
-            // 
-            this.descriptionRTB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.descriptionRTB.Enabled = false;
-            this.descriptionRTB.Location = new System.Drawing.Point(3, 3);
-            this.descriptionRTB.Name = "descriptionRTB";
-            this.descriptionRTB.Size = new System.Drawing.Size(973, 60);
-            this.descriptionRTB.TabIndex = 5;
-            this.descriptionRTB.Text = "";
-            // 
-            // menuTabControl
-            // 
-            this.menuTabControl.Controls.Add(this.descriptionTabPage);
-            this.menuTabControl.Controls.Add(this.actionsTabPage);
-            this.menuTabControl.Controls.Add(this.searchTabPage);
-            this.menuTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.menuTabControl.Location = new System.Drawing.Point(3, 16);
-            this.menuTabControl.Name = "menuTabControl";
-            this.menuTabControl.SelectedIndex = 0;
-            this.menuTabControl.Size = new System.Drawing.Size(987, 92);
-            this.menuTabControl.TabIndex = 4;
-            // 
-            // descriptionTabPage
-            // 
-            this.descriptionTabPage.Controls.Add(this.descriptionRTB);
-            this.descriptionTabPage.Location = new System.Drawing.Point(4, 22);
-            this.descriptionTabPage.Name = "descriptionTabPage";
-            this.descriptionTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.descriptionTabPage.Size = new System.Drawing.Size(979, 66);
-            this.descriptionTabPage.TabIndex = 0;
-            this.descriptionTabPage.Text = "Description";
-            this.descriptionTabPage.UseVisualStyleBackColor = true;
-            // 
-            // actionsTabPage
-            // 
-            this.actionsTabPage.Controls.Add(this.logoutButton);
-            this.actionsTabPage.Controls.Add(this.showAddVideoFormButton);
-            this.actionsTabPage.Controls.Add(this.SynchronizeButton);
-            this.actionsTabPage.Location = new System.Drawing.Point(4, 22);
-            this.actionsTabPage.Name = "actionsTabPage";
-            this.actionsTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.actionsTabPage.Size = new System.Drawing.Size(979, 66);
-            this.actionsTabPage.TabIndex = 1;
-            this.actionsTabPage.Text = "Actions";
-            this.actionsTabPage.UseVisualStyleBackColor = true;
-            // 
-            // searchTabPage
-            // 
-            this.searchTabPage.Controls.Add(this.arrowButtonLeft);
-            this.searchTabPage.Controls.Add(this.arrowButtonRight);
-            this.searchTabPage.Controls.Add(this.searchTB);
-            this.searchTabPage.Location = new System.Drawing.Point(4, 22);
-            this.searchTabPage.Name = "searchTabPage";
-            this.searchTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.searchTabPage.Size = new System.Drawing.Size(979, 66);
-            this.searchTabPage.TabIndex = 2;
-            this.searchTabPage.Text = "Search";
-            this.searchTabPage.UseVisualStyleBackColor = true;
-            // 
-            // linkDataGridViewTextBoxColumn
-            // 
-            this.linkDataGridViewTextBoxColumn.DataPropertyName = "Link";
-            this.linkDataGridViewTextBoxColumn.HeaderText = "Link";
-            this.linkDataGridViewTextBoxColumn.MinimumWidth = 175;
-            this.linkDataGridViewTextBoxColumn.Name = "linkDataGridViewTextBoxColumn";
-            this.linkDataGridViewTextBoxColumn.ReadOnly = true;
-            this.linkDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.linkDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
-            // titleDataGridViewTextBoxColumn
-            // 
-            this.titleDataGridViewTextBoxColumn.DataPropertyName = "Title";
-            this.titleDataGridViewTextBoxColumn.HeaderText = "Title";
-            this.titleDataGridViewTextBoxColumn.MinimumWidth = 175;
-            this.titleDataGridViewTextBoxColumn.Name = "titleDataGridViewTextBoxColumn";
-            this.titleDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // channelDataGridViewTextBoxColumn
-            // 
-            this.channelDataGridViewTextBoxColumn.DataPropertyName = "Channel";
-            this.channelDataGridViewTextBoxColumn.HeaderText = "Channel";
-            this.channelDataGridViewTextBoxColumn.MinimumWidth = 175;
-            this.channelDataGridViewTextBoxColumn.Name = "channelDataGridViewTextBoxColumn";
-            this.channelDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // videoBindingSource
-            // 
-            this.videoBindingSource.DataSource = typeof(YoutubePlaylistAPI.VideoModel);
-            // 
             // stateBindingSource
             // 
             this.stateBindingSource.DataSource = typeof(YoutubePlaylistAPI.Store);
+            // 
+            // ExportToCSVButton
+            // 
+            this.ExportToCSVButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.ExportToCSVButton.Location = new System.Drawing.Point(6, 35);
+            this.ExportToCSVButton.Name = "ExportToCSVButton";
+            this.ExportToCSVButton.Size = new System.Drawing.Size(147, 25);
+            this.ExportToCSVButton.TabIndex = 4;
+            this.ExportToCSVButton.Text = "Export To CSV";
+            this.ExportToCSVButton.UseVisualStyleBackColor = true;
+            this.ExportToCSVButton.Click += new System.EventHandler(this.ExportToCSVButton_Click);
             // 
             // MainForm
             // 
@@ -295,6 +309,7 @@
             this.Name = "MainForm";
             this.Text = "Vixtape Manager";
             ((System.ComponentModel.ISupportInitialize)(this.playlistDGV)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.videoBindingSource)).EndInit();
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
@@ -305,7 +320,6 @@
             this.actionsTabPage.ResumeLayout(false);
             this.searchTabPage.ResumeLayout(false);
             this.searchTabPage.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.videoBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.stateBindingSource)).EndInit();
             this.ResumeLayout(false);
 
@@ -332,6 +346,7 @@
         private System.Windows.Forms.TabPage descriptionTabPage;
         private System.Windows.Forms.TabPage actionsTabPage;
         private System.Windows.Forms.TabPage searchTabPage;
+        private System.Windows.Forms.Button ExportToCSVButton;
     }
 }
 
