@@ -9,7 +9,6 @@ namespace YoutubePlaylistAPI
 {
     internal class VideoModel //: IBindingListView
     {
-        public static readonly string LinkPrefix = @"https://youtu.be/";
         public string Link { get; set; }
         public string Title { get; set; }
         public string Channel { get; set; }
@@ -22,13 +21,6 @@ namespace YoutubePlaylistAPI
             this.Link = link;
             this.Title = title;
             this.Channel = channel;
-        }
-        // TODO: Create modelUtils for this?
-        public static string LinkWithoutPrefix(string link)
-        {
-            if (link == null)
-                throw new ArgumentNullException();
-            return link.Replace(LinkPrefix, "");
         }
     }
 }

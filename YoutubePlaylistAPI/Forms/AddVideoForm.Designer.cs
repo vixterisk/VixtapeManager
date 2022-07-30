@@ -42,7 +42,7 @@
             this.urlTB.Name = "urlTB";
             this.urlTB.Size = new System.Drawing.Size(416, 20);
             this.urlTB.TabIndex = 0;
-            this.urlTB.TextChanged += new System.EventHandler(this.urlTB_TextChanged);
+            this.urlTB.TextChanged += new System.EventHandler(this.UrlTB_TextChanged);
             // 
             // specifiedIndexCheckBox
             // 
@@ -53,7 +53,7 @@
             this.specifiedIndexCheckBox.TabIndex = 2;
             this.specifiedIndexCheckBox.Text = "Insert at the specified index (Otherwise added to the end)";
             this.specifiedIndexCheckBox.UseVisualStyleBackColor = true;
-            this.specifiedIndexCheckBox.CheckedChanged += new System.EventHandler(this.specifiedIndexCheckBox_CheckedChanged);
+            this.specifiedIndexCheckBox.CheckedChanged += new System.EventHandler(this.SpecifiedIndexCheckBox_CheckedChanged);
             // 
             // indexComboBox
             // 
@@ -62,7 +62,7 @@
             this.indexComboBox.Name = "indexComboBox";
             this.indexComboBox.Size = new System.Drawing.Size(115, 21);
             this.indexComboBox.TabIndex = 3;
-            this.indexComboBox.TextChanged += new System.EventHandler(this.indexComboBox_TextChanged);
+            this.indexComboBox.TextChanged += new System.EventHandler(this.IndexComboBox_TextChanged);
             // 
             // label1
             // 

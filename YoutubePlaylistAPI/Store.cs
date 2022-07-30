@@ -8,6 +8,7 @@ namespace YoutubePlaylistAPI
 {
     static class Store
     {
+        public static string LinkPrefix { get { return YoutubeAPIController.LinkPrefix; } }
         public static List<PlaylistModel> UsersPlaylist { get; set; }
         public static PlaylistModel CurrentPlaylist { get; set; }
 
@@ -39,7 +40,7 @@ namespace YoutubePlaylistAPI
         {
             try
             {
-                var video = await YoutubeAPIController.InsertVideoIntoPlaylist(CurrentPlaylist.Link, CurrentPlaylist.Count, videoURL);
+                var video = await YoutubeAPIController.InsertVideoIntoPlaylist(CurrentPlaylist.Link, false, CurrentPlaylist.Count, videoURL);
                 CurrentPlaylist.Add(video);
             }
             catch (Exception e)
@@ -52,7 +53,7 @@ namespace YoutubePlaylistAPI
         {
             try
             {
-                var video = await YoutubeAPIController.InsertVideoIntoPlaylist(CurrentPlaylist.Link, index, videoURL);
+                var video = await YoutubeAPIController.InsertVideoIntoPlaylist(CurrentPlaylist.Link, true, index, videoURL);
                 CurrentPlaylist.Insert(index, video);
             }
             catch (Exception e)

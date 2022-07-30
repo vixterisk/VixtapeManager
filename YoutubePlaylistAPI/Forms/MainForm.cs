@@ -27,6 +27,7 @@ namespace YoutubePlaylistAPI
         {
             Authorize();
         }
+
         private void logoutButton_Click(object sender, EventArgs e)
         {
             Authorize();
@@ -48,7 +49,7 @@ namespace YoutubePlaylistAPI
             SynchronizeButton.Enabled = playlistIsNotEmpty;
             if (playlistIsNotEmpty)
             {
-                playlistGB.Text = String.Format(@"Current playlist: {0} (https://www.youtube.com/playlist?list={1})", Store.CurrentPlaylist.Title, Store.CurrentPlaylist.Link);
+                playlistGB.Text = $"Current playlist: {Store.CurrentPlaylist.Title} (https://www.youtube.com/playlist?list={Store.CurrentPlaylist.Link})";
                 descriptionRTB.Text = Store.CurrentPlaylist.Description;
                 BindingSource bindingSource = new BindingSource();
                 bindingSource.DataSource = Store.CurrentPlaylist;
@@ -58,6 +59,11 @@ namespace YoutubePlaylistAPI
             }
         }
 
+        void ShowErrorMessage(string action, string message)
+        {
+            MessageBox.Show(message, $"Unable to {action} video");
+        }
+
         private void playlistDGV_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             if (Store.CurrentPlaylist == null)
@@ -65,7 +71,7 @@ namespace YoutubePlaylistAPI
             if (playlistDGV.Columns[e.ColumnIndex].Name == "indexColumn")
                 e.Value = (e.RowIndex + 1).ToString();
             if (playlistDGV.Columns[e.ColumnIndex].Name == "linkDataGridViewTextBoxColumn")
-                e.Value = VideoModel.LinkPrefix + e.Value;
+                e.Value = Store.LinkPrefix + e.Value;
         }
 
         private async void playlistDGV_CellEndEdit(object sender, DataGridViewCellEventArgs e)
@@ -78,10 +84,10 @@ namespace YoutubePlaylistAPI
             var newIndex = Convert.ToInt32(value) - 1;
             try {
                 var videoURL = playlistDGV.Rows[oldIndex].Cells["linkDataGridViewTextBoxColumn"].Value.ToString();
-                await Store.MoveToNewPositionInCurrentPlaylist(oldIndex, newIndex, VideoModel.LinkWithoutPrefix(videoURL));
+                await Store.MoveToNewPositionInCurrentPlaylist(oldIndex, newIndex, videoURL);
             }
             catch (Exception ex) {
-                MessageBox.Show(String.Format("Unable To Move Video.\n({0})", string.Join("\n", ex.Message)), "Error");
+                ShowErrorMessage("move", ex.Message);
                 return;
             }
             Synchronize(newIndex);
@@ -109,7 +115,7 @@ namespace YoutubePlaylistAPI
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(String.Format("Unable To Add Video.\n({0})", string.Join("\n", ex.Message)), "Error");
+                        ShowErrorMessage("add", ex.Message);
                         return;
                     }
                 }
@@ -121,7 +127,7 @@ namespace YoutubePlaylistAPI
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(String.Format("Unable To Insert Video.\n({0})", string.Join("\n", ex.Message)), "Error");
+                        ShowErrorMessage("insert", ex.Message);
                         return;
                     }
                 }
@@ -146,7 +152,7 @@ namespace YoutubePlaylistAPI
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(String.Format("Unable To Remove Video.\n({0})", string.Join("\n", ex.Message)), "Error");
+                        ShowErrorMessage("remove", ex.Message);
                         return;
                     }
                 }
@@ -167,14 +173,14 @@ namespace YoutubePlaylistAPI
             if (playlistDGV.Columns[e.ColumnIndex].Name == "linkDataGridViewTextBoxColumn")
             {
                 var videoId = (string)playlistDGV.Rows[e.RowIndex].Cells["linkDataGridViewTextBoxColumn"].Value;
-                var url = String.Format("{0}{1}", VideoModel.LinkPrefix, videoId);
+                var url = $"{Store.LinkPrefix}{videoId}";
                 try
                 {
                     Process.Start(url);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(String.Format("Unable To Open Video.\n({0})", string.Join("\n", ex.Message)), "Error");
+                    ShowErrorMessage("open", ex.Message);
                     return;
                 }
             }

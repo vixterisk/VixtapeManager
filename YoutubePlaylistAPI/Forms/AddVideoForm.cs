@@ -5,11 +5,15 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace YoutubePlaylistAPI
 {
+
+    // TODO: Add regex to validate youtube-link?
+    // TODO: ^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube(-nocookie)?\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$
     public partial class AddVideoForm : Form
     {
         string videoURL;
@@ -25,11 +29,14 @@ namespace YoutubePlaylistAPI
         private void InitializeForm()
         {
             indexComboBox.Enabled = false;
-            indexComboBox.Items.AddRange(Enumerable.Range(1, Store.CurrentPlaylist.Count + 1).Select(x => (object)x).ToArray());
+            indexComboBox.Items.AddRange(Enumerable
+                .Range(1, Store.CurrentPlaylist.Count + 1)
+                .Select(x => (object)x)
+                .ToArray());
             indexComboBox.SelectedIndex = Store.CurrentPlaylist.Count;
         }
 
-        private void specifiedIndexCheckBox_CheckedChanged(object sender, EventArgs e)
+        private void SpecifiedIndexCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             indexComboBox.Enabled = specifiedIndexCheckBox.Checked;
             if (!specifiedIndexCheckBox.Checked)
@@ -38,20 +45,30 @@ namespace YoutubePlaylistAPI
 
         private void AddVideoButton_Click(object sender, EventArgs e)
         {
-            videoURL = VideoModel.LinkWithoutPrefix(urlTB.Text);
+            videoURL = urlTB.Text;
             videoIndex = int.Parse(indexComboBox.Text);
         }
 
         void ChangeAddVideoButtonEnablement()
         {
-            AddVideoButton.Enabled = FormUtils.isIndexValueValid(indexComboBox.Text, Store.CurrentPlaylist.Count + 1) && !String.IsNullOrEmpty(urlTB.Text);
+            var isMatchRegex = IsMatchRegex(urlTB.Text);
+            AddVideoButton.Enabled = FormUtils.isIndexValueValid(indexComboBox.Text, Store.CurrentPlaylist.Count + 1) && isMatchRegex;// && !String.IsNullOrEmpty(urlTB.Text)
         }
-        private void indexComboBox_TextChanged(object sender, EventArgs e)
+        private bool IsMatchRegex(string str)
+        {
+            if (String.IsNullOrEmpty(str))
+                return false;
+            string strRegex = @"(^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube(-nocookie)?\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$)";
+            Regex regex = new Regex(strRegex);
+            return regex.IsMatch(str);
+        }
+
+        private void IndexComboBox_TextChanged(object sender, EventArgs e)
         {
             ChangeAddVideoButtonEnablement();
         }
 
-        private void urlTB_TextChanged(object sender, EventArgs e)
+        private void UrlTB_TextChanged(object sender, EventArgs e)
         {
             ChangeAddVideoButtonEnablement();
         }

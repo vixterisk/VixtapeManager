@@ -14,13 +14,21 @@ using System.Threading.Tasks;
 
 namespace YoutubePlaylistAPI
 {
-    // TODO: Make it singleton
     internal static class YoutubeAPIController
     {
         // TODO: change path to smth normal
-        // TODO: протухание токена
         const string clientSecretPath = @"client_secrets.json";
         const string applicationName = "Vixtape Manager";
+
+        public static readonly string LinkPrefix = @"https://youtu.be/";
+
+        public static string LinkWithoutPrefix(string link)
+        {
+            if (link == null)
+                throw new ArgumentNullException();
+            return link.Replace(LinkPrefix, "");
+        }
+
         public static async Task<List<PlaylistModel>> LoadUserPlaylists()
         {
             UserCredential credential;
@@ -103,8 +111,9 @@ namespace YoutubePlaylistAPI
             return result;
         }
 
-        public static async Task UpdateVideoPositionInPlaylist(string playlistURL, int oldIndex, int newIndex, string videoURL)
+        public static async Task UpdateVideoPositionInPlaylist(string playlistURL, int oldIndex, int newIndex, string fullVideoURL)
         {
+            var videoURL = LinkWithoutPrefix(fullVideoURL);
             UserCredential credential;
             using (var stream = new FileStream(clientSecretPath, FileMode.Open, FileAccess.Read))
             {
@@ -137,8 +146,11 @@ namespace YoutubePlaylistAPI
             }
         }
 
-        public static async Task<VideoModel> InsertVideoIntoPlaylist(string playlistURL, int index, string videoURL)
+
+
+        public static async Task<VideoModel> InsertVideoIntoPlaylist(string playlistURL, bool hasManualSorting, int index, string fullVideoURL)
         {
+            var videoURL = LinkWithoutPrefix(fullVideoURL);
             UserCredential credential;
             using (var stream = new FileStream(clientSecretPath, FileMode.Open, FileAccess.Read))
             {
@@ -158,7 +170,8 @@ namespace YoutubePlaylistAPI
 
             var newPlaylistItem = new PlaylistItem();
             newPlaylistItem.Snippet = new PlaylistItemSnippet();
-            newPlaylistItem.Snippet.Position = index;
+            if (hasManualSorting)
+                newPlaylistItem.Snippet.Position = index;
             newPlaylistItem.Snippet.PlaylistId = playlistURL;
             newPlaylistItem.Snippet.ResourceId = new ResourceId();
             newPlaylistItem.Snippet.ResourceId.Kind = "youtube#video";
@@ -174,8 +187,9 @@ namespace YoutubePlaylistAPI
             }
         }
 
-        public static async Task RemoveVideoFromPlaylist(string playlistURL, int index, string videoURL)
+        public static async Task RemoveVideoFromPlaylist(string playlistURL, int index, string fullVideoURL)
         {
+            var videoURL = LinkWithoutPrefix(fullVideoURL);
             UserCredential credential;
             using (var stream = new FileStream(clientSecretPath, FileMode.Open, FileAccess.Read))
             {
