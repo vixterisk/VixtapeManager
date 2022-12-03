@@ -178,7 +178,7 @@ namespace YoutubePlaylistAPI
             try
             {
                 newPlaylistItem = await youtubeService.PlaylistItems.Insert(newPlaylistItem, "snippet").ExecuteAsync();
-                return new VideoModel(videoURL, newPlaylistItem.Snippet.Title, newPlaylistItem.Snippet.VideoOwnerChannelTitle);
+                return new VideoModel(fullVideoURL, newPlaylistItem.Snippet.Title, newPlaylistItem.Snippet.VideoOwnerChannelTitle);
             }
             catch (Exception e)
             {

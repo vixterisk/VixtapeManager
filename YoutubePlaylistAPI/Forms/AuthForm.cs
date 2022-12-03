@@ -13,9 +13,19 @@ namespace YoutubePlaylistAPI
 
         private async void signInButton_Click(object sender, EventArgs e)
         {
-            await Store.LoadUserPlaylistsAsync();
-            playlistCB.DataSource = Store.UsersPlaylist;
-            AuthOkayButton.Enabled = true;
+            try
+            {
+                await Store.LoadUserPlaylistsAsync();
+                playlistCB.DataSource = Store.UsersPlaylist;
+                AuthOkayButton.Enabled = true;
+                signInButton.Enabled = false;
+
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error");
+            }
         }
 
         private async void AuthOkayButton_Click(object sender, EventArgs e)
@@ -24,9 +34,16 @@ namespace YoutubePlaylistAPI
                 return;
             else
             {
-                var PlaylistModel = (PlaylistModel)playlistCB.SelectedItem;
-                await Store.LoadCurrentPlaylistVideosAsync(PlaylistModel);
-                DialogResult = DialogResult.OK;
+                try
+                {
+                    var PlaylistModel = (PlaylistModel)playlistCB.SelectedItem;
+                    await Store.LoadCurrentPlaylistVideosAsync(PlaylistModel);
+                    DialogResult = DialogResult.OK;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error");
+                }
             }
         }
 

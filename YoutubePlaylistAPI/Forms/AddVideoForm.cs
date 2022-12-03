@@ -11,9 +11,6 @@ using System.Windows.Forms;
 
 namespace YoutubePlaylistAPI
 {
-
-    // TODO: Add regex to validate youtube-link?
-    // TODO: ^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube(-nocookie)?\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$
     public partial class AddVideoForm : Form
     {
         string videoURL;
@@ -52,7 +49,7 @@ namespace YoutubePlaylistAPI
         void ChangeAddVideoButtonEnablement()
         {
             var isMatchRegex = IsMatchRegex(urlTB.Text);
-            AddVideoButton.Enabled = FormUtils.isIndexValueValid(indexComboBox.Text, Store.CurrentPlaylist.Count + 1) && isMatchRegex;// && !String.IsNullOrEmpty(urlTB.Text)
+            AddVideoButton.Enabled = FormUtils.isIndexValueValid(indexComboBox.Text, Store.CurrentPlaylist.Count + 1) && isMatchRegex;
         }
         private bool IsMatchRegex(string str)
         {

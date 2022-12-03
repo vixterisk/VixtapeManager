@@ -49,8 +49,12 @@ namespace YoutubePlaylistAPI
         void Synchronize(int rowToFocus)
         {
             var playlistIsNotEmpty = Store.CurrentPlaylist != null;
+
             showAddVideoFormButton.Enabled = playlistIsNotEmpty;
+            DeleteVideoButton.Enabled = playlistIsNotEmpty;
+            ExportToCSVButton.Enabled = playlistIsNotEmpty;
             SynchronizeButton.Enabled = playlistIsNotEmpty;
+
             if (playlistIsNotEmpty)
             {
                 playlistGB.Text = $"Current playlist: {Store.CurrentPlaylist.Title} (https://www.youtube.com/playlist?list={Store.CurrentPlaylist.Link})";
@@ -74,10 +78,9 @@ namespace YoutubePlaylistAPI
                 return;
             if (playlistDGV.Columns[e.ColumnIndex].Name == "indexColumn")
                 e.Value = (e.RowIndex + 1).ToString();
-            if (playlistDGV.Columns[e.ColumnIndex].Name == "linkDataGridViewTextBoxColumn")
-                e.Value = Store.LinkPrefix + e.Value;
         }
 
+        // TODO: Different index when moving up or down?
         private async void playlistDGV_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             var value = playlistDGV.Rows[e.RowIndex].Cells["indexColumn"].Value;
@@ -160,10 +163,9 @@ namespace YoutubePlaylistAPI
             if (playlistDGV.Columns[e.ColumnIndex].Name == "linkDataGridViewTextBoxColumn")
             {
                 var videoId = (string)playlistDGV.Rows[e.RowIndex].Cells["linkDataGridViewTextBoxColumn"].Value;
-                var url = $"{Store.LinkPrefix}{videoId}";
                 try
                 {
-                    Process.Start(url);
+                    Process.Start(videoId);
                 }
                 catch (Exception ex)
                 {
@@ -173,9 +175,19 @@ namespace YoutubePlaylistAPI
             }
         }
 
+        private void SetSearchLabelText()
+        {
+            var index = filteredItemIndex.Count > 0? currentFilteredItemSelected + 1 : 0;
+            SearchLabel.Text = $"{index}/{filteredItemIndex.Count}";
+        }
+
+        // TODO: Clear search after every action
         private void searchTB_TextChanged(object sender, EventArgs e)
         {
             filteredItemIndex.Clear();
+            arrowButtonLeft.Enabled = false;
+            arrowButtonRight.Enabled = false;
+            currentFilteredItemSelected = 0;
 
             if (string.IsNullOrWhiteSpace(searchTB.Text))
                 return;
@@ -201,18 +213,21 @@ namespace YoutubePlaylistAPI
                 playlistDGV.CurrentCell = playlistDGV.Rows[firstFilteredRow].Cells[firstFilteredCell];
             }
             arrowButtonRight.Enabled = filteredItemIndex.Count > 1;
+            SetSearchLabelText();
         }
 
         private void arrowButtonLeft_Click(object sender, EventArgs e)
         {
             currentFilteredItemSelected--;
             SelectNextFilteredItem();
+            SetSearchLabelText();
         }
 
         private void arrowButtonRight_Click(object sender, EventArgs e)
         {
             currentFilteredItemSelected++;
             SelectNextFilteredItem();
+            SetSearchLabelText();
         }
         private void SelectNextFilteredItem()
         {
@@ -224,7 +239,6 @@ namespace YoutubePlaylistAPI
         }
         private void ExportToCSVButton_Click(object sender, EventArgs e)
         {
-            var records = Store.CurrentPlaylist.GetVideos();
 
             try
             {
@@ -241,6 +255,9 @@ namespace YoutubePlaylistAPI
                         using (var writer = new StreamWriter(fileStream))
                         using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
                         {
+                            var selectedRow = playlistDGV.SelectedCells[0].RowIndex;
+                            Synchronize(selectedRow);
+                            var records = Store.CurrentPlaylist.GetVideos();
                             csv.WriteRecords(records);
                         }
                     }

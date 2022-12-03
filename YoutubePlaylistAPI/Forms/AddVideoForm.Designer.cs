@@ -47,11 +47,11 @@
             // specifiedIndexCheckBox
             // 
             this.specifiedIndexCheckBox.AutoSize = true;
-            this.specifiedIndexCheckBox.Location = new System.Drawing.Point(91, 57);
+            this.specifiedIndexCheckBox.Location = new System.Drawing.Point(15, 57);
             this.specifiedIndexCheckBox.Name = "specifiedIndexCheckBox";
-            this.specifiedIndexCheckBox.Size = new System.Drawing.Size(216, 30);
+            this.specifiedIndexCheckBox.Size = new System.Drawing.Size(274, 30);
             this.specifiedIndexCheckBox.TabIndex = 2;
-            this.specifiedIndexCheckBox.Text = "Insert at the specified index\r\n(Otherwise added to the default position)";
+            this.specifiedIndexCheckBox.Text = "Insert at the specified index (Otherwise added to the \r\ndefault position)\r\n";
             this.specifiedIndexCheckBox.UseVisualStyleBackColor = true;
             this.specifiedIndexCheckBox.CheckedChanged += new System.EventHandler(this.SpecifiedIndexCheckBox_CheckedChanged);
             // 

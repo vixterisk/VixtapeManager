@@ -12,6 +12,8 @@ namespace YoutubePlaylistAPI
         /// Главная точка входа для приложения.
         /// </summary>
         [STAThread]
+        // TODO: publishAt добавить дату в таблицу
+        // TODO: реализовать стек с действиями для возможности отмены действия
         static void Main()
         {
             Application.EnableVisualStyles();
