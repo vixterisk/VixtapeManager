@@ -31,10 +31,6 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.playlistDGV = new System.Windows.Forms.DataGridView();
-            this.indexColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.linkDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewLinkColumn();
-            this.titleDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.channelDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.videoBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.showAddVideoFormButton = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -53,6 +49,11 @@
             this.arrowButtonRight = new System.Windows.Forms.Button();
             this.searchTB = new System.Windows.Forms.TextBox();
             this.stateBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.indexColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.linkDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewLinkColumn();
+            this.titleDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.channelDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DateDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.playlistDGV)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.videoBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -79,52 +80,21 @@
             this.indexColumn,
             this.linkDataGridViewTextBoxColumn,
             this.titleDataGridViewTextBoxColumn,
-            this.channelDataGridViewTextBoxColumn});
+            this.channelDataGridViewTextBoxColumn,
+            this.DateDataGridViewTextBoxColumn});
             this.playlistDGV.DataSource = this.videoBindingSource;
             this.playlistDGV.Dock = System.Windows.Forms.DockStyle.Fill;
             this.playlistDGV.Location = new System.Drawing.Point(0, 0);
             this.playlistDGV.Name = "playlistDGV";
             this.playlistDGV.RowHeadersWidth = 50;
             this.playlistDGV.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.playlistDGV.Size = new System.Drawing.Size(993, 615);
+            this.playlistDGV.Size = new System.Drawing.Size(1137, 615);
             this.playlistDGV.TabIndex = 1;
             this.playlistDGV.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.playlistDGV_CellContentClick);
             this.playlistDGV.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.playlistDGV_CellEndEdit);
             this.playlistDGV.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.playlistDGV_CellFormatting);
             this.playlistDGV.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.playlistDGV_CellValidating);
             this.playlistDGV.KeyDown += new System.Windows.Forms.KeyEventHandler(this.playlistDGV_KeyDown);
-            // 
-            // indexColumn
-            // 
-            this.indexColumn.HeaderText = "№";
-            this.indexColumn.MinimumWidth = 50;
-            this.indexColumn.Name = "indexColumn";
-            // 
-            // linkDataGridViewTextBoxColumn
-            // 
-            this.linkDataGridViewTextBoxColumn.DataPropertyName = "Link";
-            this.linkDataGridViewTextBoxColumn.HeaderText = "Link";
-            this.linkDataGridViewTextBoxColumn.MinimumWidth = 175;
-            this.linkDataGridViewTextBoxColumn.Name = "linkDataGridViewTextBoxColumn";
-            this.linkDataGridViewTextBoxColumn.ReadOnly = true;
-            this.linkDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.linkDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
-            // titleDataGridViewTextBoxColumn
-            // 
-            this.titleDataGridViewTextBoxColumn.DataPropertyName = "Title";
-            this.titleDataGridViewTextBoxColumn.HeaderText = "Title";
-            this.titleDataGridViewTextBoxColumn.MinimumWidth = 175;
-            this.titleDataGridViewTextBoxColumn.Name = "titleDataGridViewTextBoxColumn";
-            this.titleDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // channelDataGridViewTextBoxColumn
-            // 
-            this.channelDataGridViewTextBoxColumn.DataPropertyName = "Channel";
-            this.channelDataGridViewTextBoxColumn.HeaderText = "Channel";
-            this.channelDataGridViewTextBoxColumn.MinimumWidth = 175;
-            this.channelDataGridViewTextBoxColumn.Name = "channelDataGridViewTextBoxColumn";
-            this.channelDataGridViewTextBoxColumn.ReadOnly = true;
             // 
             // videoBindingSource
             // 
@@ -155,7 +125,7 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.playlistDGV);
-            this.splitContainer1.Size = new System.Drawing.Size(993, 710);
+            this.splitContainer1.Size = new System.Drawing.Size(1137, 710);
             this.splitContainer1.SplitterDistance = 91;
             this.splitContainer1.TabIndex = 3;
             // 
@@ -165,7 +135,7 @@
             this.playlistGB.Dock = System.Windows.Forms.DockStyle.Fill;
             this.playlistGB.Location = new System.Drawing.Point(0, 0);
             this.playlistGB.Name = "playlistGB";
-            this.playlistGB.Size = new System.Drawing.Size(993, 91);
+            this.playlistGB.Size = new System.Drawing.Size(1137, 91);
             this.playlistGB.TabIndex = 5;
             this.playlistGB.TabStop = false;
             this.playlistGB.Text = "Current playlist:";
@@ -179,7 +149,7 @@
             this.menuTabControl.Location = new System.Drawing.Point(3, 16);
             this.menuTabControl.Name = "menuTabControl";
             this.menuTabControl.SelectedIndex = 0;
-            this.menuTabControl.Size = new System.Drawing.Size(987, 72);
+            this.menuTabControl.Size = new System.Drawing.Size(1131, 72);
             this.menuTabControl.TabIndex = 4;
             // 
             // descriptionTabPage
@@ -188,7 +158,7 @@
             this.descriptionTabPage.Location = new System.Drawing.Point(4, 22);
             this.descriptionTabPage.Name = "descriptionTabPage";
             this.descriptionTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.descriptionTabPage.Size = new System.Drawing.Size(979, 46);
+            this.descriptionTabPage.Size = new System.Drawing.Size(1123, 46);
             this.descriptionTabPage.TabIndex = 0;
             this.descriptionTabPage.Text = "Description";
             this.descriptionTabPage.UseVisualStyleBackColor = true;
@@ -199,7 +169,7 @@
             this.descriptionRTB.Enabled = false;
             this.descriptionRTB.Location = new System.Drawing.Point(3, 3);
             this.descriptionRTB.Name = "descriptionRTB";
-            this.descriptionRTB.Size = new System.Drawing.Size(973, 40);
+            this.descriptionRTB.Size = new System.Drawing.Size(1117, 40);
             this.descriptionRTB.TabIndex = 5;
             this.descriptionRTB.Text = "";
             // 
@@ -213,7 +183,7 @@
             this.actionsTabPage.Location = new System.Drawing.Point(4, 22);
             this.actionsTabPage.Name = "actionsTabPage";
             this.actionsTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.actionsTabPage.Size = new System.Drawing.Size(979, 46);
+            this.actionsTabPage.Size = new System.Drawing.Size(1123, 46);
             this.actionsTabPage.TabIndex = 1;
             this.actionsTabPage.Text = "Actions";
             this.actionsTabPage.UseVisualStyleBackColor = true;
@@ -267,7 +237,7 @@
             this.searchTabPage.Location = new System.Drawing.Point(4, 22);
             this.searchTabPage.Name = "searchTabPage";
             this.searchTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.searchTabPage.Size = new System.Drawing.Size(979, 46);
+            this.searchTabPage.Size = new System.Drawing.Size(1123, 46);
             this.searchTabPage.TabIndex = 2;
             this.searchTabPage.Text = "Search";
             this.searchTabPage.UseVisualStyleBackColor = true;
@@ -313,11 +283,50 @@
             // 
             this.stateBindingSource.DataSource = typeof(YoutubePlaylistAPI.Store);
             // 
+            // indexColumn
+            // 
+            this.indexColumn.HeaderText = "№";
+            this.indexColumn.MinimumWidth = 50;
+            this.indexColumn.Name = "indexColumn";
+            // 
+            // linkDataGridViewTextBoxColumn
+            // 
+            this.linkDataGridViewTextBoxColumn.DataPropertyName = "Link";
+            this.linkDataGridViewTextBoxColumn.HeaderText = "Link";
+            this.linkDataGridViewTextBoxColumn.MinimumWidth = 175;
+            this.linkDataGridViewTextBoxColumn.Name = "linkDataGridViewTextBoxColumn";
+            this.linkDataGridViewTextBoxColumn.ReadOnly = true;
+            this.linkDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.linkDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // titleDataGridViewTextBoxColumn
+            // 
+            this.titleDataGridViewTextBoxColumn.DataPropertyName = "Title";
+            this.titleDataGridViewTextBoxColumn.HeaderText = "Title";
+            this.titleDataGridViewTextBoxColumn.MinimumWidth = 175;
+            this.titleDataGridViewTextBoxColumn.Name = "titleDataGridViewTextBoxColumn";
+            this.titleDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // channelDataGridViewTextBoxColumn
+            // 
+            this.channelDataGridViewTextBoxColumn.DataPropertyName = "Channel";
+            this.channelDataGridViewTextBoxColumn.HeaderText = "Channel";
+            this.channelDataGridViewTextBoxColumn.MinimumWidth = 175;
+            this.channelDataGridViewTextBoxColumn.Name = "channelDataGridViewTextBoxColumn";
+            this.channelDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // DateDataGridViewTextBoxColumn
+            // 
+            this.DateDataGridViewTextBoxColumn.DataPropertyName = "PublishDateTime";
+            this.DateDataGridViewTextBoxColumn.HeaderText = "DateTime";
+            this.DateDataGridViewTextBoxColumn.Name = "DateDataGridViewTextBoxColumn";
+            this.DateDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(993, 710);
+            this.ClientSize = new System.Drawing.Size(1137, 710);
             this.Controls.Add(this.splitContainer1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(707, 298);
@@ -347,10 +356,6 @@
         private System.Windows.Forms.Button showAddVideoFormButton;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.Button SynchronizeButton;
-        private System.Windows.Forms.DataGridViewTextBoxColumn indexColumn;
-        private System.Windows.Forms.DataGridViewLinkColumn linkDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn titleDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn channelDataGridViewTextBoxColumn;
         private System.Windows.Forms.Button arrowButtonLeft;
         private System.Windows.Forms.Button arrowButtonRight;
         private System.Windows.Forms.TextBox searchTB;
@@ -364,6 +369,11 @@
         private System.Windows.Forms.Button ExportToCSVButton;
         private System.Windows.Forms.Button DeleteVideoButton;
         private System.Windows.Forms.Label SearchLabel;
+        private System.Windows.Forms.DataGridViewTextBoxColumn indexColumn;
+        private System.Windows.Forms.DataGridViewLinkColumn linkDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn titleDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn channelDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn DateDataGridViewTextBoxColumn;
     }
 }
 

@@ -78,9 +78,13 @@ namespace YoutubePlaylistAPI
                 return;
             if (playlistDGV.Columns[e.ColumnIndex].Name == "indexColumn")
                 e.Value = (e.RowIndex + 1).ToString();
+            //if (playlistDGV.Columns[e.ColumnIndex].Name == "DateDataGridViewTextBoxColumn") 
+            //{
+            //    var value = (DateTime)e.Value;
+            //    e.Value = value.ToString("dd/MM/yyyy");
+            //}
         }
 
-        // TODO: Different index when moving up or down?
         private async void playlistDGV_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             var value = playlistDGV.Rows[e.RowIndex].Cells["indexColumn"].Value;
@@ -154,6 +158,7 @@ namespace YoutubePlaylistAPI
         private async void SynchronizeButton_Click(object sender, EventArgs e)
         {
             var selectedRow = playlistDGV.SelectedCells[0].RowIndex;
+            // TODO обработать если плейлист уже удален
             await Store.LoadCurrentPlaylistVideosAsync(Store.CurrentPlaylist);
             Synchronize(selectedRow);
         }
@@ -165,7 +170,9 @@ namespace YoutubePlaylistAPI
                 var videoId = (string)playlistDGV.Rows[e.RowIndex].Cells["linkDataGridViewTextBoxColumn"].Value;
                 try
                 {
-                    Process.Start(videoId);
+                    var index = videoId.LastIndexOf('/');
+                    var urlTemplate = String.Format("https://www.youtube.com/watch?v={0}&list={1}", videoId.Substring(index + 1), Store.CurrentPlaylist.Link);
+                    Process.Start(urlTemplate);
                 }
                 catch (Exception ex)
                 {
@@ -182,6 +189,7 @@ namespace YoutubePlaylistAPI
         }
 
         // TODO: Clear search after every action
+        // TODO: Add needed columns selection
         private void searchTB_TextChanged(object sender, EventArgs e)
         {
             filteredItemIndex.Clear();

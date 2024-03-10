@@ -28,6 +28,22 @@ namespace YoutubePlaylistAPI
             return link.Replace(LinkPrefix, "");
         }
 
+        private static string GetPropertiesIncluded(bool snippetIncluded = true, bool contentDetailsIncluded = false)
+        {
+            var separator = ",";
+            var snippet = "snippet";
+            var contentDetails = "contentDetails";
+            var parameters = new List<String>();
+
+            if (snippetIncluded)
+                parameters.Add(snippet);
+            if (contentDetailsIncluded)
+                parameters.Add(contentDetails);
+            var result = string.Join(separator, parameters);
+
+            return result;
+        }
+
         public static async Task<List<PlaylistModel>> LoadUserPlaylists()
         {
             UserCredential credential;
@@ -47,7 +63,7 @@ namespace YoutubePlaylistAPI
                 ApplicationName = applicationName
             });
 
-            var playlistListRequest = youtubeService.Playlists.List("snippet");
+            var playlistListRequest = youtubeService.Playlists.List(GetPropertiesIncluded());
             playlistListRequest.Mine = true;
             playlistListRequest.MaxResults = 50;
 
@@ -88,7 +104,7 @@ namespace YoutubePlaylistAPI
                 ApplicationName = applicationName
             });
 
-            var playlistItemsListRequest = youtubeService.PlaylistItems.List("snippet");
+            var playlistItemsListRequest = youtubeService.PlaylistItems.List(GetPropertiesIncluded(true, true));
             playlistItemsListRequest.PlaylistId = playlistURL;
             playlistItemsListRequest.MaxResults = 50;
 
@@ -99,10 +115,11 @@ namespace YoutubePlaylistAPI
                 foreach (var video in playlistItemsListResponse.Items)
                 {
                     var videoId = $"{LinkPrefix}{video.Snippet.ResourceId.VideoId}";
+                    var videoDate = video.ContentDetails.VideoPublishedAt;
                     var videoTitle = video.Snippet.Title;
                     var videoChannelTitle = video.Snippet.VideoOwnerChannelTitle;
 
-                    var currentVideo = new VideoModel(videoId, videoTitle, videoChannelTitle);
+                    var currentVideo = new VideoModel(videoId, videoTitle, videoChannelTitle, videoDate);
                     result.Add(currentVideo);
                 }
                 playlistItemsListRequest.PageToken = playlistItemsListResponse.NextPageToken;
@@ -130,7 +147,7 @@ namespace YoutubePlaylistAPI
                 ApplicationName = applicationName
             });
 
-            var playlistItemsListRequest = youtubeService.PlaylistItems.List("snippet");
+            var playlistItemsListRequest = youtubeService.PlaylistItems.List(GetPropertiesIncluded());
             playlistItemsListRequest.PlaylistId = playlistURL;
             playlistItemsListRequest.VideoId = videoURL;
 
@@ -140,7 +157,7 @@ namespace YoutubePlaylistAPI
                 var newPlaylistItem = video;
                 newPlaylistItem.Snippet.Position = newIndex;
                 
-                var request = youtubeService.PlaylistItems.Update(newPlaylistItem, "snippet");
+                var request = youtubeService.PlaylistItems.Update(newPlaylistItem, GetPropertiesIncluded());
                 await request.ExecuteAsync();
             }
         }
@@ -177,8 +194,8 @@ namespace YoutubePlaylistAPI
             newPlaylistItem.Snippet.ResourceId.VideoId = videoURL;
             try
             {
-                newPlaylistItem = await youtubeService.PlaylistItems.Insert(newPlaylistItem, "snippet").ExecuteAsync();
-                return new VideoModel(fullVideoURL, newPlaylistItem.Snippet.Title, newPlaylistItem.Snippet.VideoOwnerChannelTitle);
+                newPlaylistItem = await youtubeService.PlaylistItems.Insert(newPlaylistItem, GetPropertiesIncluded(true, true)).ExecuteAsync();
+                return new VideoModel(fullVideoURL, newPlaylistItem.Snippet.Title, newPlaylistItem.Snippet.VideoOwnerChannelTitle, newPlaylistItem.ContentDetails.VideoPublishedAt);
             }
             catch (Exception e)
             {
@@ -206,7 +223,7 @@ namespace YoutubePlaylistAPI
                 ApplicationName = applicationName
             });
 
-            var playlistItemsListRequest = youtubeService.PlaylistItems.List("snippet");
+            var playlistItemsListRequest = youtubeService.PlaylistItems.List(GetPropertiesIncluded());
             playlistItemsListRequest.PlaylistId = playlistURL;
             playlistItemsListRequest.VideoId = videoURL;
 
