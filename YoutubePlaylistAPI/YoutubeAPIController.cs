@@ -52,7 +52,7 @@ namespace YoutubePlaylistAPI
                 credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
                     GoogleClientSecrets.FromStream(stream).Secrets,
                     new[] { YouTubeService.Scope.Youtube },
-                    "user",
+                    Guid.NewGuid().ToString("n"),
                     CancellationToken.None
                 );
             }
